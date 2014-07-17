@@ -1,56 +1,201 @@
 import data.DATA;
-import utils.SimpleComboBox;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileFilter;
+import java.util.ArrayList;
 
 public class DFileExplorer extends JFrame {
 
     private final JPanel contentPane = new JPanel(null);
+    private final LineBorder defaultBorder2 = new LineBorder(new Color(0, 0, 0, 25), 2, true);
+    private final JPanel display = new JPanel(null);
+    private String currentDirectory;
 
-    public DFileExplorer(){
+    private ArrayList<File> filePath = new ArrayList<File>();
+    private JLabel back_tab;
+    private JLabel first_tab = new JLabel("");
+    private JLabel second_tab = new JLabel("");
+
+    private String finalDestination = "";
+
+    public DFileExplorer() {
 
         setUndecorated(true);
         setBounds(0, 0, 500, 300);
         setLocationRelativeTo(null);
         setContentPane(contentPane);
 
+
         contentPane.setBounds(0, 0, getWidth(), getHeight());
         contentPane.setBackground(Color.white);
-        contentPane.setBorder(new LineBorder(new Color(0,0,0,25), 2));
+        contentPane.setBorder(new LineBorder(new Color(0, 0, 0, 25), 2));
         contentPane.add(get_minimize());
-        contentPane.add(get_maximize());
+        contentPane.add(get_close());
+        contentPane.add(first_tab);
+        contentPane.add(second_tab);
 
-        final JLabel dirTitle = new JLabel("Dir");
-        dirTitle.setBounds(50,50,30,20);
-        contentPane.add(dirTitle);
+        this.currentDirectory = (this.currentDirectory == null) ? "C:\\" : this.currentDirectory;
+        back_tab = DButton.get_button("<", DATA.COLORS.LIGHT_BLUE, getContentPane(), defaultBorder2, new Runnable() {
+            @Override
+            public void run() {
+                repopulateDisplay(filePath.get(filePath.size()-2));
+            }
+        });
+        back_tab.setBounds(50,17,20,30);
+        back_tab.setBorder(defaultBorder2);
 
-        final JComboBox<String> dirComboBox = new JComboBox<String>(getFileNames("C:\\"));
-        dirComboBox.setBounds(90, 50, 200, 20);
-        dirComboBox.setBorder(null);
-        dirComboBox.setBackground(Color.white);
-        for (int i = 0; i < dirComboBox.getComponentCount(); i++)
-        {
-            System.out.println(dirComboBox.getComponent(i));
-            if (dirComboBox.getComponent(i) instanceof JComponent) {
-                ((JComponent) dirComboBox.getComponent(i)).setBorder(new LineBorder(DATA.COLORS.GRAY));
+        display.setBounds(50, 60, 400, 185);
+        display.setBorder(new LineBorder(new Color(0, 0, 0, 25), 2));
+        display.setBackground(Color.white);
+        contentPane.add(display);
+
+        JLabel select = DButton.get_button("Select", DATA.COLORS.GREEN, getContentPane(), new Runnable() {
+            @Override
+            public void run() {
+                finalDestination = currentDirectory;
+                getFrames()[0].dispatchEvent(new WindowEvent(getFrames()[0], WindowEvent.WINDOW_CLOSING));
+            }
+        });
+        select.setBounds(290, 250, 75, 35);
+        contentPane.add(select);
+
+        JLabel cancel = DButton.get_button("Cancel", DATA.COLORS.RED, getContentPane(), new Runnable() {
+            @Override
+            public void run() {
+                finalDestination = null;
+                getFrames()[0].dispatchEvent(new WindowEvent(getFrames()[0], WindowEvent.WINDOW_CLOSING));
+            }
+        });
+        cancel.setBounds(375, 250, 75, 35);
+        contentPane.add(cancel);
+    }
+
+    public String execute(String startingDirectory){
+        setVisible(true);
+        this.currentDirectory = startingDirectory;
+        repopulateDisplay(new File(startingDirectory));
+        while (this.finalDestination.equals("")){
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
-        contentPane.add(dirComboBox);
+        return this.finalDestination;
+    }
 
-        contentPane.add(new SimpleComboBox().get());
+    private void makeTabs(final String name, final String destination){
+
+        currentDirectory = destination;
+
+        String[] dirs = destination.split("\\\\");
+        filePath.clear();
+        String curDir = "";
+        for (String dir : dirs){
+            curDir += dir + "\\";
+            filePath.add(new File(curDir));
+        }
+
+        contentPane.remove(back_tab);
+        contentPane.remove(first_tab);
+        contentPane.remove(second_tab);
+
+        if (filePath.size() > 1){
+            first_tab =  makeTab(filePath.get(filePath.size() - 2).getName(), filePath.get(filePath.size() - 2).getAbsolutePath());
+            int minWidth = ((int) (first_tab.getFontMetrics(first_tab.getFont()).getStringBounds(first_tab.getText(),first_tab.getGraphics()).getWidth()) + first_tab.getInsets().left + first_tab.getInsets().right) + 12;
+            first_tab.setBorder(defaultBorder2);
+            first_tab.setBounds(50, 17, minWidth, 30);
+            contentPane.add(first_tab);
+
+            second_tab = makeTab(name, destination);
+            int minWidth2 = ((int) (second_tab.getFontMetrics(second_tab.getFont()).getStringBounds(second_tab.getText(),second_tab.getGraphics()).getWidth()) + second_tab.getInsets().left + second_tab.getInsets().right) + 12;
+            second_tab.setBorder(defaultBorder2);
+            second_tab.setBounds(50 + first_tab.getWidth(), 17, minWidth2, 30);
+            contentPane.add(second_tab);
+        } else {
+            second_tab = makeTab(name, destination);
+            int minWidth2 = ((int) (second_tab.getFontMetrics(second_tab.getFont()).getStringBounds(second_tab.getText(),second_tab.getGraphics()).getWidth()) + second_tab.getInsets().left + second_tab.getInsets().right) + 12;
+            second_tab.setBorder(defaultBorder2);
+            second_tab.setBounds(50, 17, minWidth2, 30);
+            contentPane.add(second_tab);
+        }
+
+        if (filePath.size() > 2){
+            first_tab.setBounds(first_tab.getX() + 20, first_tab.getY(), first_tab.getWidth(), first_tab.getHeight());
+            second_tab.setBounds(second_tab.getX() + 20, second_tab.getY(), second_tab.getWidth(), second_tab.getHeight());
+            contentPane.add(back_tab);
+        }
+
+        repaint();
+    }
+
+    private JLabel makeTab(String name, final String destination) {
+        name = (name.equals("") ? "C:" : name);
+        return DButton.get_button(name, DATA.COLORS.LIGHT_BLUE, getContentPane(), defaultBorder2, new Runnable() {
+            @Override
+            public void run() {
+                repopulateDisplay(new File(destination));
+            }
+        });
+    }
+
+    private JPanel makeFolder(final File file, int x_marg, int y_marg){
+        final JPanel newPanel = new JPanel(null);
+        newPanel.setBounds(x_marg,y_marg,125,20);
+        newPanel.setBackground(Color.white);
+
+        JLabel icon = new JLabel(new ImageIcon(this.getClass().getResource("Flat_Folder_Icon.png")));
+        icon.setBounds(0,0,20,20);
+        newPanel.add(icon);
+
+        JLabel folderName = new JLabel(file.getName());
+        folderName.setBounds(25,0,103,20);
+        newPanel.add(folderName);
+
+        newPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                repopulateDisplay(file.getAbsoluteFile());
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                newPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                newPanel.setBackground(DATA.COLORS.GRAY);
+                newPanel.setForeground(Color.white);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                newPanel.setBorder(null);
+                newPanel.setBackground(Color.white);
+                newPanel.setForeground(DATA.COLORS.DARK_GRAY);
+
+                getContentPane().setCursor(Cursor.getDefaultCursor());
+            }
+        });
+
+        return newPanel;
     }
 
     private String[] getFileNames(String s) {
+        System.out.println(s);
         File[] files = new File(s).listFiles(new FileFilter() {
             @Override
             public boolean accept(File pathname) {
-                return pathname.isDirectory() && !pathname.isHidden();
+                return pathname.isDirectory() && !pathname.isHidden() && pathname.canRead();
             }
         });
 
@@ -60,6 +205,20 @@ public class DFileExplorer extends JFrame {
         }
 
         return strings;
+    }
+
+    private void repopulateDisplay(File file) {
+        display.removeAll();
+        repaint();
+        String[] files = getFileNames(file.getAbsolutePath());
+        int x_marg = 5, y_marg = 5, i = 0;
+        for (String fileName : files){
+            display.add(makeFolder(new File(file.getAbsolutePath() + "\\" + fileName), x_marg, y_marg));
+            i = (i > 6) ? 1 : i + 1;
+            x_marg = (i > 6) ? x_marg + 133 : x_marg;
+            y_marg = (i > 6) ? 5 : y_marg + 25;
+        }
+        makeTabs(file.getName(), file.getAbsolutePath());
     }
 
     private JLabel get_minimize(){
@@ -92,12 +251,13 @@ public class DFileExplorer extends JFrame {
         return header_min_label;
     }
 
-    private JLabel get_maximize() {
+    private JLabel get_close() {
         final JLabel header_close_label_mi = new JLabel("X", SwingConstants.CENTER);
         header_close_label_mi.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.exit(-1);
+                finalDestination = null;
+                getFrames()[0].dispatchEvent(new WindowEvent(getFrames()[0], WindowEvent.WINDOW_CLOSING));
             }
 
             @Override

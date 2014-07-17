@@ -12,8 +12,10 @@ public class Main {
         UIManager.put("ComboBox.selectionBackground", new ColorUIResource(Color.white));
         UIManager.put("Label.font", new Font("Verdana", Font.PLAIN, 14));
         UIManager.put("Label.foreground", new Color(0x404040));
+        UIManager.put("TextField.font", new Font("Verdana", Font.PLAIN, 14));
+        UIManager.put("TextField.foreground", new Color(0x404040));
 
         DFileExplorer x = new DFileExplorer();
-        x.setVisible(true);
+        System.out.println(x.execute("C:\\"));
     }
 }

@@ -7,6 +7,8 @@ public class Colors {
     public final Color darkColor = new Color(0x2B2B2B);
     public final Color lightColor = new Color(0x3A3D3F);
 
+    public final Color BORDER_COLOR = new Color(0, 0, 0, 25);
+
     public final Color GREEN = new Color(0x109D58);
     public final Color LIGHT_GREEN = new Color(0x2FA772);
 

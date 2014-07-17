@@ -15,7 +15,7 @@ public class SimpleComboBox {
     private final JLabel displayIcon = new JLabel(">", SwingConstants.CENTER);
 
     public SimpleComboBox(){
-        mainPanel.setBounds(0,0,200,30);
+        mainPanel.setBounds(90, 40, 200, 30);
         mainPanel.setBorder(new LineBorder(DATA.COLORS.GRAY,1,true));
         mainPanel.setBackground(Color.white);
 
@@ -36,5 +36,10 @@ public class SimpleComboBox {
 
     public JComponent get() {
         return mainPanel;
+    }
+
+    public void setBounds(int x_marg, int y_marg, int x, int y){
+        mainPanel.setBounds(x_marg,y_marg,x,y);
+        //Will also need to adjust the components...
     }
 }
