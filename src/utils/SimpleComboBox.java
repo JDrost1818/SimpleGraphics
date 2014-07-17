@@ -1,6 +1,6 @@
 package utils;
 
-import data.DATA;
+import data.DATAR;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -16,21 +16,21 @@ public class SimpleComboBox {
 
     public SimpleComboBox(){
         mainPanel.setBounds(90, 40, 200, 30);
-        mainPanel.setBorder(new LineBorder(DATA.COLORS.GRAY,1,true));
+        mainPanel.setBorder(new LineBorder(DATAR.COLORS.GRAY,1,true));
         mainPanel.setBackground(Color.white);
 
         displayLabel.setBounds(10,0,165,30);
-        displayLabel.setBackground(DATA.COLORS.DARK_GRAY);
+        displayLabel.setBackground(DATAR.COLORS.DARK_GRAY);
         mainPanel.add(displayLabel);
 
         seperator.setBounds(165,-2,10,30);
         seperator.setVerticalAlignment(SwingConstants.CENTER);
-        seperator.setForeground(DATA.COLORS.GRAY);
+        seperator.setForeground(DATAR.COLORS.GRAY);
         seperator.setFont(new Font("Verdana", Font.PLAIN, 18));
         mainPanel.add(seperator);
 
         displayIcon.setBounds(175,0,25,30);
-        displayIcon.setBackground(DATA.COLORS.DARK_GRAY);
+        displayIcon.setBackground(DATAR.COLORS.DARK_GRAY);
         mainPanel.add(displayIcon);
     }
 

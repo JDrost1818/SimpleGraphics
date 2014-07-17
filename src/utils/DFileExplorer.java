@@ -1,4 +1,6 @@
-import data.DATA;
+package utils;
+
+import data.DATAR;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -24,7 +26,8 @@ public class DFileExplorer extends JFrame {
     private JLabel second_tab = new JLabel("");
     private int curPageOfResults = 0;
 
-    private String finalDestination = "";
+    public String finalDestination = "";
+    private Frame thisFrame;
 
     public DFileExplorer() {
 
@@ -42,79 +45,90 @@ public class DFileExplorer extends JFrame {
         contentPane.add(first_tab);
         contentPane.add(second_tab);
 
-        this.currentDirectory = (this.currentDirectory == null) ? "C:\\" : this.currentDirectory;
-        back_tab = DButton.get_button("<", DATA.COLORS.LIGHT_BLUE, getContentPane(), defaultBorder2, new Runnable() {
-            @Override
-            public void run() {
-                repopulateDisplay(filePath.get(filePath.size()-2));
-            }
-        });
-        back_tab.setBounds(50,17,20,30);
-        back_tab.setBorder(defaultBorder2);
-
-        display.setBounds(50, 60, 400, 185);
-        display.setBorder(new LineBorder(new Color(0, 0, 0, 25), 2));
-        display.setBackground(Color.white);
-        contentPane.add(display);
-
-        JLabel select = DButton.get_button("Select", DATA.COLORS.GREEN, getContentPane(), new Runnable() {
-            @Override
-            public void run() {
-                finalDestination = currentDirectory;
-                getFrames()[0].dispatchEvent(new WindowEvent(getFrames()[0], WindowEvent.WINDOW_CLOSING));
-            }
-        });
-        select.setBounds(290, 250, 75, 35);
-        contentPane.add(select);
-
-        JLabel cancel = DButton.get_button("Cancel", DATA.COLORS.RED, getContentPane(), new Runnable() {
-            @Override
-            public void run() {
-                finalDestination = null;
-                getFrames()[0].dispatchEvent(new WindowEvent(getFrames()[0], WindowEvent.WINDOW_CLOSING));
-            }
-        });
-        cancel.setBounds(375, 250, 75, 35);
-        contentPane.add(cancel);
-
-        JLabel scrollLeftButton = DButton.get_button("<", DATA.COLORS.GRAY, getContentPane(), new Runnable() {
-            @Override
-            public void run() {
-                if (curPageOfResults > 0){
-                    curPageOfResults--;
-                    turnPage();
+        for (Frame frame : getFrames()) {
+            try {
+                JFrame jframe = (JFrame) frame;
+                if (jframe.getContentPane().equals(contentPane)) {
+                    thisFrame = frame;
                 }
+            } catch (Exception e) { // Do Nothing }
             }
-        });
-        scrollLeftButton.setBounds(10,145,30,30);
-        contentPane.add(scrollLeftButton);
 
-        JLabel scrollRightButton = DButton.get_button(">", DATA.COLORS.GRAY, getContentPane(), new Runnable() {
-            @Override
-            public void run() {
-                System.out.println(getFileNames(currentDirectory).length - 21 - curPageOfResults*7);
-                if (getFileNames(currentDirectory).length - 21 - curPageOfResults*7 > 0){
-                    curPageOfResults++;
-                    turnPage();
+            this.currentDirectory = (this.currentDirectory == null) ? "C:\\" : this.currentDirectory;
+            back_tab = DButton.get_button("<", DATAR.COLORS.LIGHT_BLUE, getContentPane(), defaultBorder2, new Runnable() {
+                @Override
+                public void run() {
+                    repopulateDisplay(filePath.get(filePath.size() - 2));
                 }
-            }
-        });
-        scrollRightButton.setBounds(460,145,30,30);
-        contentPane.add(scrollRightButton);
+            });
+
+            back_tab.setBounds(50, 17, 20, 30);
+            back_tab.setBorder(defaultBorder2);
+            back_tab.setFont(new Font("Verdana", Font.PLAIN, 14));
+            first_tab.setFont(new Font("Verdana", Font.PLAIN, 14));
+            second_tab.setFont(new Font("Verdana", Font.PLAIN, 14));
+
+            display.setBounds(50, 60, 400, 185);
+            display.setBorder(new LineBorder(new Color(0, 0, 0, 25), 2));
+            display.setBackground(Color.white);
+            contentPane.add(display);
+
+            JLabel select = DButton.get_button("Select", DATAR.COLORS.GREEN, getContentPane(), new Runnable() {
+                @Override
+                public void run() {
+                    finalDestination = currentDirectory;
+                    thisFrame.dispatchEvent(new WindowEvent(thisFrame, WindowEvent.WINDOW_CLOSING));
+                }
+            });
+            select.setBounds(290, 250, 75, 35);
+            select.setFont(new Font("Verdana", Font.PLAIN, 14));
+            contentPane.add(select);
+
+            JLabel cancel = DButton.get_button("Cancel", DATAR.COLORS.RED, getContentPane(), new Runnable() {
+                @Override
+                public void run() {
+                    finalDestination = null;
+                    thisFrame.dispatchEvent(new WindowEvent(thisFrame, WindowEvent.WINDOW_CLOSING));
+                }
+            });
+            cancel.setBounds(375, 250, 75, 35);
+            cancel.setFont(new Font("Verdana", Font.PLAIN, 14));
+            contentPane.add(cancel);
+
+            JLabel scrollLeftButton = DButton.get_button("<", DATAR.COLORS.GRAY, getContentPane(), new Runnable() {
+                @Override
+                public void run() {
+                    if (curPageOfResults > 0) {
+                        curPageOfResults--;
+                        turnPage();
+                    }
+                }
+            });
+            scrollLeftButton.setBounds(10, 139, 30, 30);
+            scrollLeftButton.setFont(new Font("Verdana", Font.PLAIN, 14));
+            contentPane.add(scrollLeftButton);
+
+            JLabel scrollRightButton = DButton.get_button(">", DATAR.COLORS.GRAY, getContentPane(), new Runnable() {
+                @Override
+                public void run() {
+                    if (getFileNames(currentDirectory).length - 21 - curPageOfResults * 7 > 0) {
+                        curPageOfResults++;
+                        turnPage();
+                    }
+                }
+            });
+            scrollRightButton.setBounds(460, 139, 30, 30);
+            scrollRightButton.setFont(new Font("Verdana", Font.PLAIN, 14));
+            contentPane.add(scrollRightButton);
+        }
     }
 
-    public String execute(String startingDirectory){
-        setVisible(true);
-        this.currentDirectory = startingDirectory;
+    public void execute(final String startingDirectory){
+        thisFrame.setVisible(true);
+        System.out.println("HERE");
+        currentDirectory = startingDirectory;
         repopulateDisplay(new File(startingDirectory));
-        while (this.finalDestination != null && this.finalDestination.equals("")){
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        return this.finalDestination;
+
     }
 
     private void makeTabs(final String name, final String destination){
@@ -135,18 +149,21 @@ public class DFileExplorer extends JFrame {
 
         if (filePath.size() > 1){
             first_tab =  makeTab(filePath.get(filePath.size() - 2).getName(), filePath.get(filePath.size() - 2).getAbsolutePath());
+            first_tab.setFont(new Font("Verdana", Font.PLAIN, 14));
             int minWidth = ((int) (first_tab.getFontMetrics(first_tab.getFont()).getStringBounds(first_tab.getText(),first_tab.getGraphics()).getWidth()) + first_tab.getInsets().left + first_tab.getInsets().right) + 12;
             first_tab.setBorder(defaultBorder2);
             first_tab.setBounds(50, 17, minWidth, 30);
             contentPane.add(first_tab);
 
             second_tab = makeTab(name, destination);
+            second_tab.setFont(new Font("Verdana", Font.PLAIN, 14));
             int minWidth2 = ((int) (second_tab.getFontMetrics(second_tab.getFont()).getStringBounds(second_tab.getText(),second_tab.getGraphics()).getWidth()) + second_tab.getInsets().left + second_tab.getInsets().right) + 12;
             second_tab.setBorder(defaultBorder2);
             second_tab.setBounds(50 + first_tab.getWidth(), 17, minWidth2, 30);
             contentPane.add(second_tab);
         } else {
             second_tab = makeTab(name, destination);
+            second_tab.setFont(new Font("Verdana", Font.PLAIN, 14));
             int minWidth2 = ((int) (second_tab.getFontMetrics(second_tab.getFont()).getStringBounds(second_tab.getText(),second_tab.getGraphics()).getWidth()) + second_tab.getInsets().left + second_tab.getInsets().right) + 12;
             second_tab.setBorder(defaultBorder2);
             second_tab.setBounds(50, 17, minWidth2, 30);
@@ -164,7 +181,7 @@ public class DFileExplorer extends JFrame {
 
     private JLabel makeTab(String name, final String destination) {
         name = (name.equals("") ? "C:" : name);
-        return DButton.get_button(name, DATA.COLORS.LIGHT_BLUE, getContentPane(), defaultBorder2, new Runnable() {
+        return DButton.get_button(name, DATAR.COLORS.LIGHT_BLUE, getContentPane(), defaultBorder2, new Runnable() {
             @Override
             public void run() {
                 repopulateDisplay(new File(destination));
@@ -183,6 +200,7 @@ public class DFileExplorer extends JFrame {
 
         JLabel folderName = new JLabel(file.getName());
         folderName.setBounds(25,0,103,20);
+        folderName.setFont(new Font("Verdana", Font.PLAIN, 14));
         newPanel.add(folderName);
 
         newPanel.addMouseListener(new MouseAdapter() {
@@ -199,7 +217,7 @@ public class DFileExplorer extends JFrame {
             @Override
             public void mouseEntered(MouseEvent e) {
                 getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                newPanel.setBackground(DATA.COLORS.GRAY);
+                newPanel.setBackground(DATAR.COLORS.GRAY);
                 newPanel.setForeground(Color.white);
             }
 
@@ -207,7 +225,7 @@ public class DFileExplorer extends JFrame {
             public void mouseExited(MouseEvent e) {
                 newPanel.setBorder(null);
                 newPanel.setBackground(Color.white);
-                newPanel.setForeground(DATA.COLORS.DARK_GRAY);
+                newPanel.setForeground(DATAR.COLORS.DARK_GRAY);
 
                 getContentPane().setCursor(Cursor.getDefaultCursor());
             }
@@ -267,7 +285,7 @@ public class DFileExplorer extends JFrame {
             y_marg = (j > 6) ? 5 : y_marg + 25;
         }
         repaint();
-        revalidate();
+        validate();
     }
 
     private JLabel get_minimize(){
@@ -275,13 +293,13 @@ public class DFileExplorer extends JFrame {
         header_min_label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                getFrames()[0].setState(Frame.ICONIFIED);
+                thisFrame.setState(Frame.ICONIFIED);
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
                 getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                header_min_label.setBackground(DATA.COLORS.GRAY);
+                header_min_label.setBackground(DATAR.COLORS.GRAY);
             }
 
             @Override
@@ -291,10 +309,10 @@ public class DFileExplorer extends JFrame {
             }
         });
         header_min_label.setBackground(Color.white);
-        header_min_label.setBounds(getContentPane().getWidth()-70, 10, 30, 30);
+        header_min_label.setBounds(getContentPane().getWidth() - 70, 10, 30, 30);
         header_min_label.setOpaque(true);
         header_min_label.setFont(new Font("Serif", Font.PLAIN, 20));
-        header_min_label.setForeground(DATA.COLORS.DARK_GRAY);
+        header_min_label.setForeground(DATAR.COLORS.DARK_GRAY);
         header_min_label.setVerticalAlignment(SwingConstants.TOP);
 
         return header_min_label;
@@ -306,13 +324,13 @@ public class DFileExplorer extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 finalDestination = null;
-                getFrames()[0].dispatchEvent(new WindowEvent(getFrames()[0], WindowEvent.WINDOW_CLOSING));
+                thisFrame.dispatchEvent(new WindowEvent(thisFrame, WindowEvent.WINDOW_CLOSING));
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
                 getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                header_close_label_mi.setBackground(DATA.COLORS.GRAY);
+                header_close_label_mi.setBackground(DATAR.COLORS.GRAY);
             }
 
             @Override
@@ -325,7 +343,7 @@ public class DFileExplorer extends JFrame {
         header_close_label_mi.setBounds(getContentPane().getWidth()-40, 10, 30, 30);
         header_close_label_mi.setOpaque(true);
         header_close_label_mi.setFont(new Font("Serif", Font.PLAIN, 20));
-        header_close_label_mi.setForeground(DATA.COLORS.DARK_GRAY);
+        header_close_label_mi.setForeground(DATAR.COLORS.DARK_GRAY);
         header_close_label_mi.setVerticalAlignment(SwingConstants.BOTTOM);
 
         return header_close_label_mi;
