@@ -22,6 +22,7 @@ public class DFileExplorer extends JFrame {
     private JLabel back_tab;
     private JLabel first_tab = new JLabel("");
     private JLabel second_tab = new JLabel("");
+    private int curPageOfResults = 0;
 
     private String finalDestination = "";
 
@@ -75,13 +76,38 @@ public class DFileExplorer extends JFrame {
         });
         cancel.setBounds(375, 250, 75, 35);
         contentPane.add(cancel);
+
+        JLabel scrollLeftButton = DButton.get_button("<", DATA.COLORS.GRAY, getContentPane(), new Runnable() {
+            @Override
+            public void run() {
+                if (curPageOfResults > 0){
+                    curPageOfResults--;
+                    turnPage();
+                }
+            }
+        });
+        scrollLeftButton.setBounds(10,145,30,30);
+        contentPane.add(scrollLeftButton);
+
+        JLabel scrollRightButton = DButton.get_button(">", DATA.COLORS.GRAY, getContentPane(), new Runnable() {
+            @Override
+            public void run() {
+                System.out.println(getFileNames(currentDirectory).length - 21 - curPageOfResults*7);
+                if (getFileNames(currentDirectory).length - 21 - curPageOfResults*7 > 0){
+                    curPageOfResults++;
+                    turnPage();
+                }
+            }
+        });
+        scrollRightButton.setBounds(460,145,30,30);
+        contentPane.add(scrollRightButton);
     }
 
     public String execute(String startingDirectory){
         setVisible(true);
         this.currentDirectory = startingDirectory;
         repopulateDisplay(new File(startingDirectory));
-        while (this.finalDestination.equals("")){
+        while (this.finalDestination != null && this.finalDestination.equals("")){
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
@@ -191,7 +217,7 @@ public class DFileExplorer extends JFrame {
     }
 
     private String[] getFileNames(String s) {
-        System.out.println(s);
+
         File[] files = new File(s).listFiles(new FileFilter() {
             @Override
             public boolean accept(File pathname) {
@@ -209,6 +235,7 @@ public class DFileExplorer extends JFrame {
 
     private void repopulateDisplay(File file) {
         display.removeAll();
+        this.curPageOfResults = 0;
         repaint();
         String[] files = getFileNames(file.getAbsolutePath());
         int x_marg = 5, y_marg = 5, i = 0;
@@ -219,6 +246,28 @@ public class DFileExplorer extends JFrame {
             y_marg = (i > 6) ? 5 : y_marg + 25;
         }
         makeTabs(file.getName(), file.getAbsolutePath());
+    }
+
+    private File[] fileNamesToFiles(String[] fileNames){
+        File[] files = new File[fileNames.length];
+        for(int i=0; i < files.length; i++){
+            files[i] = new File(fileNames[i]);
+        }
+        return files;
+    }
+
+    private void turnPage(){
+        display.removeAll();
+        File[] files = fileNamesToFiles(getFileNames(new File(currentDirectory).getAbsolutePath()));
+        int x_marg = 5, y_marg = 5, j = 0;
+        for (int i=curPageOfResults*7; i < files.length; i++){
+            display.add(makeFolder(files[i], x_marg, y_marg));
+            j = (j > 6) ? 1 : j + 1;
+            x_marg = (j > 6) ? x_marg + 133 : x_marg;
+            y_marg = (j > 6) ? 5 : y_marg + 25;
+        }
+        repaint();
+        revalidate();
     }
 
     private JLabel get_minimize(){
