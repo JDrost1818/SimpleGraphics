@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="DGraphics:jar">
-    <output-path>$PROJECT_DIR$/../Powerbot/libs</output-path>
-    <root id="archive" name="DGraphics.jar">
-      <element id="module-output" name="DGraphics" />
-    </root>
-  </artifact>
-</component>
