@@ -41,11 +41,9 @@ public class Colors {
         float[] hsb = new float[3];
         Color.RGBtoHSB(r,g,b,hsb);
 
-        float change = .08f;
-        if (backgroundColor.getRGB() > -1000){
-            change *= -1;
-        }
-        return new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]+change));
+        hsb[2] = (hsb[2]+.08f > 1) ? .9f : hsb[2] + .08f;
+
+        return new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
     }
 
     public static Color backgroundToText(Color backgroundColor){
@@ -54,13 +52,14 @@ public class Colors {
         int b = backgroundColor.getBlue();
         float[] hsb = new float[3];
         Color.RGBtoHSB(r,g,b,hsb);
+        if (hsb[2] < .85){
+            hsb[2] = (hsb[1] > .07) ? .27f : hsb[2];
+        }
 
         hsb[0] = 0;
         hsb[1] = 0;
-        hsb[2] -= (hsb[2] < .25) ? .3 : .7;
-        if (hsb[2] < 0){
-            hsb[2] = 1 + hsb[2];
-        }
+        hsb[2] = .25f / ((hsb[2] < .25) ? .25f : hsb[2]);
+        if (hsb[2] > 1) { hsb[2] = 1; }
 
         return new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
     }

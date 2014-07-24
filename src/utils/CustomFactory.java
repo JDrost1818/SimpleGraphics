@@ -68,7 +68,9 @@ public class CustomFactory {
         colors[1] = (invisible) ? contentPane.getBackground() : background;
         colors[2] = Colors.backgroundToText(colors[0]);
         colors[3] = Colors.backgroundToText(colors[1]);
+
         newButton.setBackground(colors[1]);
+        newButton.setForeground(colors[3]);
 
         // Add Actions/Event Handlers
         final Timer enterTimer = buildFadeTimer(colors, contentPane, newButton, 1);
