@@ -1,6 +1,6 @@
 package utils;
 
-import data.DATAR;
+import data.DATA;
 import settings.DBUTTON;
 
 import javax.swing.*;
@@ -53,7 +53,7 @@ public class DButton {
             public void mouseExited(MouseEvent e) {
                 new_button.setBorder(null);
                 new_button.setBackground(Color.white);
-                new_button.setForeground(DATAR.COLORS.DARK_GRAY);
+                new_button.setForeground(DATA.COLORS.DARK_GRAY);
 
                 content_pane.setCursor(Cursor.getDefaultCursor());
             }
@@ -90,7 +90,7 @@ public class DButton {
             public void mouseExited(MouseEvent e) {
                 new_button.setBorder(border);
                 new_button.setBackground(Color.white);
-                new_button.setForeground(DATAR.COLORS.DARK_GRAY);
+                new_button.setForeground(DATA.COLORS.DARK_GRAY);
 
                 content_pane.setCursor(Cursor.getDefaultCursor());
             }

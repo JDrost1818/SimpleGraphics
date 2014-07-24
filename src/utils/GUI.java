@@ -1,6 +1,6 @@
 package utils;
 
-import data.DATAR;
+import data.DATA;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,16 +36,16 @@ public class GUI extends JFrame {
         buttonConcept.setFont(new Font("Verdana", Font.PLAIN, 24));
         buttonConcept.setOpaque(true);
         buttonConcept.setBackground(Color.white);
-        buttonConcept.setForeground(DATAR.COLORS.DARK_GRAY);
+        buttonConcept.setForeground(DATA.COLORS.DARK_GRAY);
 
         timer = new Timer(5, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int red, green, blue, alpha;
                 Color background = buttonConcept.getBackground();
                 if (background == Color.white){
-                    red = DATAR.COLORS.BLUE.getRed();
-                    green = DATAR.COLORS.BLUE.getGreen();
-                    blue = DATAR.COLORS.BLUE.getBlue();
+                    red = DATA.COLORS.BLUE.getRed();
+                    green = DATA.COLORS.BLUE.getGreen();
+                    blue = DATA.COLORS.BLUE.getBlue();
                     background = new Color(red, green, blue, 0);
                 }
                 red = background.getRed();
@@ -84,7 +84,7 @@ public class GUI extends JFrame {
             public void mouseExited(MouseEvent e) {
                 timer.stop();
                 buttonConcept.setBackground(Color.white);
-                buttonConcept.setForeground(DATAR.COLORS.DARK_GRAY);
+                buttonConcept.setForeground(DATA.COLORS.DARK_GRAY);
                 contentPane.setCursor(Cursor.getDefaultCursor());
             }
 

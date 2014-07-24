@@ -1,6 +1,6 @@
 package utils;
 
-import data.DATAR;
+import data.DATA;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -56,12 +56,12 @@ public class DFileExplorer extends JFrame {
         }
 
         this.currentDirectory = (this.currentDirectory == null) ? "C:\\" : this.currentDirectory;
-        back_tab = DButton.get_button("<", DATAR.COLORS.LIGHT_BLUE, getContentPane(), defaultBorder2, new Runnable() {
+        back_tab = DButton.get_button("<", DATA.COLORS.LIGHT_BLUE, getContentPane(), defaultBorder2, new Runnable() {
             @Override
             public void run() {
                 repopulateDisplay(filePath.get(filePath.size() - 2));
                 back_tab.setBackground(Color.white);
-                back_tab.setForeground(DATAR.COLORS.DARK_GRAY);
+                back_tab.setForeground(DATA.COLORS.DARK_GRAY);
                 back_tab.setBorder(defaultBorder2);
             }
         });
@@ -77,7 +77,7 @@ public class DFileExplorer extends JFrame {
         display.setBackground(Color.white);
         contentPane.add(display);
 
-        JLabel select = DButton.get_button("Select", DATAR.COLORS.GREEN, getContentPane(), new Runnable() {
+        JLabel select = DButton.get_button("Select", DATA.COLORS.GREEN, getContentPane(), new Runnable() {
             @Override
             public void run() {
                 finalDestination = currentDirectory;
@@ -88,7 +88,7 @@ public class DFileExplorer extends JFrame {
         select.setFont(defaultFont);
         contentPane.add(select);
 
-        JLabel cancel = DButton.get_button("Cancel", DATAR.COLORS.RED, getContentPane(), new Runnable() {
+        JLabel cancel = DButton.get_button("Cancel", DATA.COLORS.RED, getContentPane(), new Runnable() {
             @Override
             public void run() {
                 finalDestination = "";
@@ -99,7 +99,7 @@ public class DFileExplorer extends JFrame {
         cancel.setFont(defaultFont);
         contentPane.add(cancel);
 
-        JLabel scrollLeftButton = DButton.get_button("<", DATAR.COLORS.GRAY, getContentPane(), new Runnable() {
+        JLabel scrollLeftButton = DButton.get_button("<", DATA.COLORS.GRAY, getContentPane(), new Runnable() {
             @Override
             public void run() {
                 if (curPageOfResults > 0) {
@@ -112,7 +112,7 @@ public class DFileExplorer extends JFrame {
         scrollLeftButton.setFont(defaultFont);
         contentPane.add(scrollLeftButton);
 
-        JLabel scrollRightButton = DButton.get_button(">", DATAR.COLORS.GRAY, getContentPane(), new Runnable() {
+        JLabel scrollRightButton = DButton.get_button(">", DATA.COLORS.GRAY, getContentPane(), new Runnable() {
             @Override
             public void run() {
                 if (getFileNames(currentDirectory).length - 21 - curPageOfResults * 7 > 0) {
@@ -185,7 +185,7 @@ public class DFileExplorer extends JFrame {
 
     private JLabel makeTab(String name, final String destination) {
         name = (name.equals("") ? "C:" : name);
-        return DButton.get_button(name, DATAR.COLORS.LIGHT_BLUE, getContentPane(), defaultBorder2, new Runnable() {
+        return DButton.get_button(name, DATA.COLORS.LIGHT_BLUE, getContentPane(), defaultBorder2, new Runnable() {
             @Override
             public void run() {
                 repopulateDisplay(new File(destination));
@@ -222,7 +222,7 @@ public class DFileExplorer extends JFrame {
             @Override
             public void mouseEntered(MouseEvent e) {
                 getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                newPanel.setBackground(DATAR.COLORS.GRAY);
+                newPanel.setBackground(DATA.COLORS.GRAY);
                 newPanel.setForeground(Color.white);
             }
 
@@ -230,7 +230,7 @@ public class DFileExplorer extends JFrame {
             public void mouseExited(MouseEvent e) {
                 newPanel.setBorder(null);
                 newPanel.setBackground(Color.white);
-                newPanel.setForeground(DATAR.COLORS.DARK_GRAY);
+                newPanel.setForeground(DATA.COLORS.DARK_GRAY);
 
                 getContentPane().setCursor(Cursor.getDefaultCursor());
             }
@@ -310,7 +310,7 @@ public class DFileExplorer extends JFrame {
             @Override
             public void mouseEntered(MouseEvent e) {
                 getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                header_min_label.setBackground(DATAR.COLORS.GRAY);
+                header_min_label.setBackground(DATA.COLORS.GRAY);
             }
 
             @Override
@@ -323,7 +323,7 @@ public class DFileExplorer extends JFrame {
         header_min_label.setBounds(getContentPane().getWidth() - 70, 10, 30, 30);
         header_min_label.setOpaque(true);
         header_min_label.setFont(new Font("Serif", Font.PLAIN, 20));
-        header_min_label.setForeground(DATAR.COLORS.DARK_GRAY);
+        header_min_label.setForeground(DATA.COLORS.DARK_GRAY);
         header_min_label.setVerticalAlignment(SwingConstants.TOP);
 
         return header_min_label;
@@ -341,7 +341,7 @@ public class DFileExplorer extends JFrame {
             @Override
             public void mouseEntered(MouseEvent e) {
                 getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                header_close_label_mi.setBackground(DATAR.COLORS.GRAY);
+                header_close_label_mi.setBackground(DATA.COLORS.GRAY);
             }
 
             @Override
@@ -354,7 +354,7 @@ public class DFileExplorer extends JFrame {
         header_close_label_mi.setBounds(getContentPane().getWidth()-40, 10, 30, 30);
         header_close_label_mi.setOpaque(true);
         header_close_label_mi.setFont(new Font("Serif", Font.PLAIN, 20));
-        header_close_label_mi.setForeground(DATAR.COLORS.DARK_GRAY);
+        header_close_label_mi.setForeground(DATA.COLORS.DARK_GRAY);
         header_close_label_mi.setVerticalAlignment(SwingConstants.BOTTOM);
 
         return header_close_label_mi;

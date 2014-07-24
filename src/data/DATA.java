@@ -1,6 +1,6 @@
 package data;
 
-public class DATAR {
+public class DATA {
 
     public static final Colors COLORS = new Colors();
 
