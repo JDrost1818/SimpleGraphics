@@ -1,8 +1,8 @@
 
 import utils.DFileExplorer;
+import utils.GUI;
 
 import javax.swing.*;
-import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 
 /**
@@ -17,6 +17,7 @@ public class Main {
         UIManager.put("TextField.foreground", new Color(0x404040));
 
         DFileExplorer x = new DFileExplorer();
-        x.execute("C:\\");
+        GUI gui = new GUI();
+        gui.setVisible(true);
     }
 }
