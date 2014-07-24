@@ -148,7 +148,6 @@ public class DFileExplorer extends JFrame {
                 if (i == dirs.length-2 && dirs.length > 2)
                     filePath.add(new File("<"));
                 filePath.add(new File(curDir));
-                System.out.println("ADDED " + curDir);
             }
         }
 
@@ -160,7 +159,7 @@ public class DFileExplorer extends JFrame {
         // Make new tabs
         int x_marg = 50, y_marg = 17, i=0;
         for (File curFile : filePath){
-            System.out.println(curFile.getName());
+            System.out.println("Name = " + curFile.getName());
             if (curFile.getName().equals("<")){
                 contentPane.add(back_tab);
                 x_marg += 20;
@@ -189,9 +188,8 @@ public class DFileExplorer extends JFrame {
     }
 
     private JLabel makeTab(final File someFile, final Runnable action) {
-        //String name = (someFile.getName().equals("") ? "C:" : someFile.getName());
-        //System.out.println(someFile.getName());
-        final JLabel newTab = new JLabel(someFile.getName(), SwingConstants.CENTER);
+        String name = (someFile.getName().equals("") ? "C:" : someFile.getName());
+        final JLabel newTab = new JLabel(name, SwingConstants.CENTER);
         newTab.setForeground(Colors.backgroundToText(Color.white));
         newTab.setBackground(Color.white);
         newTab.setBorder(defaultBorder2);
