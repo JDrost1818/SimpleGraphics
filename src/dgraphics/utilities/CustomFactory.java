@@ -27,8 +27,8 @@ public class CustomFactory {
         contentPane.setBounds(new Rectangle(size));
 
         // Add components
-        contentPane.add(ComponentFactory.getMinimize(topFrame, contentPane, backgroundColor));
-        contentPane.add(ComponentFactory.getClose(topFrame, contentPane, backgroundColor));
+        contentPane.add(ComponentFactory.getMinimize(contentPane, backgroundColor));
+        contentPane.add(ComponentFactory.getClose(contentPane, backgroundColor));
 
         return contentPane;
     }

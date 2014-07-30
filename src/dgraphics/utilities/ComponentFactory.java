@@ -21,7 +21,7 @@ public class ComponentFactory {
         return newLabel;
     }
 
-    public static JLabel getMinimize(final Frame frame, final Container contentPane, final Color backgroundColor){
+    public static JLabel getMinimize(final JPanel contentPane, final Color backgroundColor){
         final JLabel minLabel = getColoredJLabel("_", backgroundColor);
         final Color[] palette = Colors.getColorPalette(backgroundColor);
         minLabel.setBounds(contentPane.getWidth()-70, 10, 30, 30);
@@ -29,18 +29,18 @@ public class ComponentFactory {
         minLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                frame.setState(Frame.ICONIFIED);
+                ((JFrame)contentPane.getRootPane().getParent()).setState(Frame.ICONIFIED);
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                contentPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                contentPane.getRootPane().getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 minLabel.setBackground(palette[2]);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                contentPane.setCursor(Cursor.getDefaultCursor());
+                contentPane.getRootPane().getContentPane().setCursor(Cursor.getDefaultCursor());
                 minLabel.setBackground(palette[0]);
             }
         });
@@ -48,7 +48,7 @@ public class ComponentFactory {
         return minLabel;
     }
 
-    public static JLabel getClose(final Frame frame, final Container contentPane, final Color backgroundColor){
+    public static JLabel getClose(final Container contentPane, final Color backgroundColor){
         final JLabel closeLabel = getColoredJLabel("X", backgroundColor);
         final Color[] palette = Colors.getColorPalette(backgroundColor);
         closeLabel.setBounds(contentPane.getWidth()-40, 10, 30, 30);

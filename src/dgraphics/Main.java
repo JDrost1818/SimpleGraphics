@@ -1,6 +1,6 @@
 package dgraphics;
 
-import dgraphics.utilities.DFileExplorer;
+import dgraphics.utilities.SimpleExplorer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,8 +16,8 @@ public class Main {
         UIManager.put("TextField.font", new Font("Verdana", Font.PLAIN, 14));
         UIManager.put("TextField.foreground", new Color(0x404040));
 
-        DFileExplorer x = new DFileExplorer();
-        x.execute("C:\\");
+        SimpleExplorer x = new SimpleExplorer();
+        x.execute("C:\\Users\\");
         //GUI gui = new GUI();
         //gui.setVisible(true);
     }
