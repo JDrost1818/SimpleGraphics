@@ -1,6 +1,6 @@
-package utils;
+package dgraphics.utilities;
 
-import data.DATA;
+import dgraphics.data.DATA;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,6 +1,7 @@
-package utils;
+package dgraphics.utilities;
 
-import data.Colors;
+import dgraphics.data.Colors;
+import dgraphics.data.DATA;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +24,7 @@ public class ComponentFactory {
     public static JLabel getMinimize(final Frame frame, final Container contentPane, final Color backgroundColor){
         final JLabel minLabel = getColoredJLabel("_", backgroundColor);
         final Color[] palette = Colors.getColorPalette(backgroundColor);
-        minLabel.setBounds(730, 10, 30, 30);
+        minLabel.setBounds(contentPane.getWidth()-70, 10, 30, 30);
         minLabel.setVerticalAlignment(SwingConstants.TOP);
         minLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -50,7 +51,7 @@ public class ComponentFactory {
     public static JLabel getClose(final Frame frame, final Container contentPane, final Color backgroundColor){
         final JLabel closeLabel = getColoredJLabel("X", backgroundColor);
         final Color[] palette = Colors.getColorPalette(backgroundColor);
-        closeLabel.setBounds(760, 10, 30, 30);
+        closeLabel.setBounds(contentPane.getWidth()-40, 10, 30, 30);
         closeLabel.setVerticalAlignment(SwingConstants.BOTTOM);
         closeLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -72,5 +73,33 @@ public class ComponentFactory {
         });
 
         return closeLabel;
+    }
+
+    public static JTextField getTextField(Color bg, final String text) {
+        final JTextField entryField = new JTextField(text);
+
+        entryField.setBorder(null);
+        entryField.setBackground(bg);
+        entryField.setEditable(true);
+        entryField.setFont(DATA.FONTS.SMALL);
+        entryField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (entryField.getText().equals(text))
+                    entryField.setText("");
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                entryField.getRootPane().getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                entryField.getRootPane().getContentPane().setCursor(Cursor.getDefaultCursor());
+            }
+        });
+
+        return entryField;
     }
 }

@@ -1,4 +1,4 @@
-package data;
+package dgraphics.data;
 
 import java.awt.*;
 

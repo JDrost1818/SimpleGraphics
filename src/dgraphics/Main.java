@@ -1,5 +1,6 @@
+package dgraphics;
 
-import utils.DFileExplorer;
+import dgraphics.utilities.DFileExplorer;
 
 import javax.swing.*;
 import java.awt.*;

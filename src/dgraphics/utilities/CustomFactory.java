@@ -1,6 +1,6 @@
-package utils;
+package dgraphics.utilities;
 
-import data.Colors;
+import dgraphics.data.Colors;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -12,7 +12,7 @@ import java.awt.event.MouseEvent;
 
 public class CustomFactory {
 
-    public static JPanel buildContentPane(Frame topFrame, Color backgroundColor){
+    public static JPanel buildContentPane(Frame topFrame, Color backgroundColor, Dimension size){
 
         /*
             Produces a pretty bare-bones JPanel which fits the style
@@ -24,7 +24,7 @@ public class CustomFactory {
         // Design layout and colors
         JPanel contentPane = new JPanel(null);
         contentPane.setBackground(backgroundColor);
-        contentPane.setMinimumSize(new Dimension(800, 500));
+        contentPane.setBounds(new Rectangle(size));
 
         // Add components
         contentPane.add(ComponentFactory.getMinimize(topFrame, contentPane, backgroundColor));
@@ -88,7 +88,7 @@ public class CustomFactory {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                contentPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                newButton.getRootPane().getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 newButton.setForeground(colors[2]);
                 if (invisible) {
                     enterTimer.start();
@@ -109,7 +109,7 @@ public class CustomFactory {
 
                 newButton.setBorder(null);
                 newButton.setForeground(colors[3]);
-                contentPane.setCursor(Cursor.getDefaultCursor());
+                newButton.getRootPane().getContentPane().setCursor(Cursor.getDefaultCursor());
             }
         });
 

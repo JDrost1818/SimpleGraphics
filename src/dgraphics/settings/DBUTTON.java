@@ -1,4 +1,4 @@
-package settings;
+package dgraphics.settings;
 
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
