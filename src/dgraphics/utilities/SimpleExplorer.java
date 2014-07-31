@@ -33,13 +33,13 @@ public class SimpleExplorer extends JFrame {
     private JLabel secondTab = new JLabel("", SwingConstants.CENTER);
 
     // Variables
-    private boolean notDone = true;
     private File currentFile;
+    private File backFile = new File("<");
     private File[] curDirFiles;
     private int curPageIndex = 0;
-    private String finalDirectory;
     private String currentDirectory;
     private String startingDirectory;
+    private String finalDirectory = "";
     private MouseListener backTabListener;
     private MouseListener firstTabListener;
     private MouseListener secondTabListener;
@@ -61,7 +61,6 @@ public class SimpleExplorer extends JFrame {
         contentPane.add(getClose());
         contentPane.add(getMinimize());
 
-
         // Decorate Display
         display.setBounds(50, 60, 400, 185);
         display.setBorder(new LineBorder(new Color(0, 0, 0, 25), 2));
@@ -81,7 +80,7 @@ public class SimpleExplorer extends JFrame {
 
     }
 
-    public String execute(String beginDirectory) {
+    public void execute(String beginDirectory) {
         /*
             Populates the display. Everything else hereafter is handled
             by the buttons and the refreshHandler. This method runs until
@@ -94,6 +93,7 @@ public class SimpleExplorer extends JFrame {
         // Initializes needed variables/data
         startingDirectory = beginDirectory;
         currentDirectory = startingDirectory;
+        finalDirectory = startingDirectory;
         curDirFiles = getDirFiles(currentDirectory);
         filePath = getDirFilePath(currentDirectory);
 
@@ -108,16 +108,6 @@ public class SimpleExplorer extends JFrame {
         makeTabs(filePath);
 
         refresh();
-
-        while (notDone) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return finalDirectory;
     }
 
     /*
@@ -149,7 +139,6 @@ public class SimpleExplorer extends JFrame {
         // Makes the tabs
         makeTabs(filePath);
 
-        System.out.println(index);
         refresh();
     }
 
@@ -185,7 +174,7 @@ public class SimpleExplorer extends JFrame {
 
         if (curDirFiles.length > this.curPageIndex*21 && direction > 0) {
             this.curPageIndex += direction;
-            refreshHandler(new File(currentDirectory), -1);
+            refreshHandler(currentFile, -1);
         } else if (this.curPageIndex > 0 && direction < 0) {
             this.curPageIndex += direction;
             refreshHandler(currentFile, -1);
@@ -193,10 +182,14 @@ public class SimpleExplorer extends JFrame {
     }
 
     private void exit(String exitDir) {
-        notDone = false;
         finalDirectory = exitDir;
         getRootPane().getParent().dispatchEvent(new WindowEvent(((JFrame) getRootPane().getParent()), WindowEvent.WINDOW_CLOSING));
     }
+
+    public String  getReturnValue() {
+        return finalDirectory;
+    }
+
 
     /*
         These are data finders. They take a variable in and extrapolate
@@ -226,7 +219,7 @@ public class SimpleExplorer extends JFrame {
             curDir += dirs[i] + "\\";
             if (i >= dirs.length-2){
                 if (i == dirs.length-2 && dirs.length > 2)
-                    path.add(new File("<"));
+                    path.add(backFile);
                 path.add(new File(curDir));
             }
         }
@@ -357,10 +350,12 @@ public class SimpleExplorer extends JFrame {
         } else {
             curTab.setText(newFile.getName().equals("") ? "C:" : newFile.getName());
         }
-        curTab.setForeground(Colors.backgroundToText(Color.white));
-        curTab.setBackground(Color.white);
-        curTab.setBorder(defaultBorder);
+
         curTab.setOpaque(true);
+        curTab.setFont(defaultFont);
+        curTab.setBorder(defaultBorder);
+        curTab.setBackground(Color.white);
+        curTab.setForeground(Colors.backgroundToText(Color.white));
 
 
         updateListener(curTab, newFile);
@@ -389,6 +384,7 @@ public class SimpleExplorer extends JFrame {
     }
 
     private MouseListener getNewMouseListener(final JLabel curTab, final File newFile) {
+
         return new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {

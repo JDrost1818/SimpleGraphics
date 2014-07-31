@@ -25,6 +25,7 @@ public class FolderPanel {
 
         this.name = new JLabel(name);
         this.name.setBounds(30,0,98,25);
+        this.name.setFont(new Font("Verdana", Font.PLAIN, 14));
         this.mainPanel.add(this.name);
 
         this.mainPanel.setBounds(getBounds(number));
