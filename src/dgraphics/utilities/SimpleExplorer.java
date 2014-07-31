@@ -32,6 +32,7 @@ public class SimpleExplorer extends JFrame {
     private JLabel secondTab = new JLabel("", SwingConstants.CENTER);
 
     // Variables
+    private File currentFile;
     private File[] curDirFiles;
     private int curPageIndex = 0;
     private String currentDirectory;
@@ -114,26 +115,31 @@ public class SimpleExplorer extends JFrame {
             will wind up doing the grunt work.
          */
 
-        // This means a Folder was clicked, which only returns an index, unlike tabs
+        // This means a Folder was clicked, which only gives an index
         if (curFile == null) {
             curFile = getFile((this.curPageIndex*21) + index);
         }
 
+        currentFile = curFile;
         currentDirectory = curFile.getAbsolutePath();
         curDirFiles = getDirFiles(currentDirectory);
         filePath = getDirFilePath(currentDirectory);
 
         // Updates the 21 panels with their new names
-        for (int i=0; i < 21; i++) {
-            String name = (curDirFiles.length > i) ? curDirFiles[i].getName() : "";
-            folderList[i].setName(name);
-        }
+        updatePanels();
 
         // Makes the tabs
         makeTabs(filePath);
 
         System.out.println(index);
         refresh();
+    }
+
+    private void updatePanels() {
+        for (int i=this.curPageIndex*21, j=0; i < this.curPageIndex*21 + 21; i++, j++) {
+            String name = (curDirFiles.length > i) ? curDirFiles[i].getName() : "";
+            folderList[j].setName(name);
+        }
     }
 
     private void makeTabs(ArrayList<File> filePath) {
@@ -153,6 +159,18 @@ public class SimpleExplorer extends JFrame {
                 tabPanel.add(secondTab);
             }
             i++;
+        }
+    }
+
+    private void turnPage(int direction) {
+        // direction = -1 for left or 1 for right
+
+        if (curDirFiles.length > this.curPageIndex*21 && direction > 0) {
+            this.curPageIndex += direction;
+            refreshHandler(new File(currentDirectory), -1);
+        } else if (this.curPageIndex > 0 && direction < 0) {
+            this.curPageIndex += direction;
+            refreshHandler(currentFile, -1);
         }
     }
 
@@ -226,7 +244,7 @@ public class SimpleExplorer extends JFrame {
         JLabel scrollLeftButton = CustomFactory.buildButton("<", DATA.COLORS.GRAY, getContentPane(), true, new Runnable() {
             @Override
             public void run() {
-                // Nothing Yet
+                turnPage(-1);
             }
         });
         scrollLeftButton.setBounds(10, 139, 30, 30);
@@ -239,7 +257,7 @@ public class SimpleExplorer extends JFrame {
         JLabel scrollRightButton = CustomFactory.buildButton(">", DATA.COLORS.GRAY, getContentPane(), true, new Runnable() {
             @Override
             public void run() {
-                // Nothing Yet
+                turnPage(1);
             }
         });
         scrollRightButton.setBounds(460, 139, 30, 30);
