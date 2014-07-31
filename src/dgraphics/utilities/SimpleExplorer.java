@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
@@ -54,11 +55,12 @@ public class SimpleExplorer extends JFrame {
         setContentPane(contentPane);
 
         // Decorate Content Pane
-        contentPane.setBounds(0, 0, getWidth(), getHeight());
         contentPane.setBackground(Color.white);
+        contentPane.setBounds(0, 0, getWidth(), getHeight());
         contentPane.setBorder(new LineBorder(new Color(0, 0, 0, 25), 2));
-        contentPane.add(ComponentFactory.getMinimize(contentPane, contentPane.getBackground()));
-        contentPane.add(ComponentFactory.getClose(contentPane, contentPane.getBackground()));
+        contentPane.add(getClose());
+        contentPane.add(getMinimize());
+
 
         // Decorate Display
         display.setBounds(50, 60, 400, 185);
@@ -82,12 +84,14 @@ public class SimpleExplorer extends JFrame {
     public String execute(String beginDirectory) {
         /*
             Populates the display. Everything else hereafter is handled
-            by the buttons and the refreshHandler
+            by the buttons and the refreshHandler. This method runs until
+            the frame is closed by a button and returns an appropriate
+            directory string.
          */
 
         setVisible(true);
 
-        // Intitializes needed variables/data
+        // Initializes needed variables/data
         startingDirectory = beginDirectory;
         currentDirectory = startingDirectory;
         curDirFiles = getDirFiles(currentDirectory);
@@ -285,6 +289,62 @@ public class SimpleExplorer extends JFrame {
         scrollRightButton.setFont(defaultFont);
 
         return scrollRightButton;
+    }
+
+    private JLabel getMinimize(){
+        final JLabel minLabel = ComponentFactory.getColoredJLabel("_", Color.white);
+        final Color[] palette = Colors.getColorPalette(Color.white);
+        minLabel.setFont(defaultFont);
+        minLabel.setBounds(contentPane.getWidth()-50, 10, 20, 20);
+        minLabel.setVerticalAlignment(SwingConstants.TOP);
+        minLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                ((JFrame)contentPane.getRootPane().getParent()).setState(Frame.ICONIFIED);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                contentPane.getRootPane().getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                minLabel.setBackground(palette[2]);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                contentPane.getRootPane().getContentPane().setCursor(Cursor.getDefaultCursor());
+                minLabel.setBackground(palette[0]);
+            }
+        });
+
+        return minLabel;
+    }
+
+    public JLabel getClose(){
+        final JLabel closeLabel = ComponentFactory.getColoredJLabel("X", Color.white);
+        final Color[] palette = Colors.getColorPalette(Color.white);
+        closeLabel.setFont(defaultFont);
+        closeLabel.setBounds(contentPane.getWidth()-30, 10, 20, 20);
+        closeLabel.setVerticalAlignment(SwingConstants.BOTTOM);
+        closeLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                exit(startingDirectory);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                contentPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                closeLabel.setBackground(palette[2]);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                contentPane.setCursor(Cursor.getDefaultCursor());
+                closeLabel.setBackground(palette[0]);
+            }
+        });
+
+        return closeLabel;
     }
 
     private int updateTab(final JLabel curTab, final File newFile, int margin) {
