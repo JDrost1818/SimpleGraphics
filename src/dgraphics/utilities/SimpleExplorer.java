@@ -20,7 +20,6 @@ public class SimpleExplorer extends JFrame {
     // Default L&F Stuff
     private final Font defaultFont = new Font("Verdana", Font.PLAIN, 14);
     private final LineBorder defaultBorder = new LineBorder(new Color(0, 0, 0, 25), 2, true);
-    private final ImageIcon folderIcon = new ImageIcon(this.getClass().getResource("Flat_Folder_Icon.png"));
 
     // Top Level Containers
     private final JPanel display = new JPanel(null);
@@ -34,17 +33,20 @@ public class SimpleExplorer extends JFrame {
 
     // Variables
     private File currentFile;
-    private File backFile = new File("<");
     private File[] curDirFiles;
     private int curPageIndex = 0;
+    private boolean notDone = true;
     private String currentDirectory;
     private String startingDirectory;
     private String finalDirectory = "";
+    private FileFilter currentFileFilter;
+    private File backFile = new File("<");
     private MouseListener backTabListener;
     private MouseListener firstTabListener;
     private MouseListener secondTabListener;
-    private FolderPanel[] folderList = new FolderPanel[21];
+
     private ArrayList<File> filePath = new ArrayList<File>();
+    private FolderPanel[] folderList = new FolderPanel[21];
 
     public SimpleExplorer() {
 
@@ -78,9 +80,11 @@ public class SimpleExplorer extends JFrame {
         contentPane.add(getScrollLeftButton());
         contentPane.add(getScrollRightButton());
 
+        setFileFilterToFolders();
+
     }
 
-    public void execute(String beginDirectory) {
+    public String execute(String beginDirectory) {
         /*
             Populates the display. Everything else hereafter is handled
             by the buttons and the refreshHandler. This method runs until
@@ -90,24 +94,28 @@ public class SimpleExplorer extends JFrame {
 
         setVisible(true);
 
-        // Initializes needed variables/data
+        // Used for return value if canceled
         startingDirectory = beginDirectory;
-        currentDirectory = startingDirectory;
-        finalDirectory = startingDirectory;
-        curDirFiles = getDirFiles(currentDirectory);
-        filePath = getDirFilePath(currentDirectory);
 
-        // Makes 21 panels because that's how many fit on the display
-        for (int i=0; i < 21; i++) {
-            String name = (curDirFiles.length > i) ? curDirFiles[i].getName() : "";
-            folderList[i] = new FolderPanel(this, i, name, folderIcon);
-            display.add(folderList[i].get());
+        // Makes the display's folders only if they aren't made already
+        if (folderList[1] == null) {
+            System.out.println(startingDirectory);
+            curDirFiles = getDirFiles(startingDirectory);
+            makeFolders();
         }
 
-        // Makes the tabs
-        makeTabs(filePath);
+        // Calls the refreshHandler to update the UI
+        refreshHandler(new File(startingDirectory), -1);
 
-        refresh();
+        while (notDone) {
+            try {
+                Thread.sleep(75);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return finalDirectory;
     }
 
     /*
@@ -143,8 +151,15 @@ public class SimpleExplorer extends JFrame {
     }
 
     private void updatePanels() {
+        File curFile;
         for (int i=this.curPageIndex*21, j=0; i < this.curPageIndex*21 + 21; i++, j++) {
-            String name = (curDirFiles.length > i) ? curDirFiles[i].getName() : "";
+             curFile = (curDirFiles != null && curDirFiles.length > i) ? curDirFiles[i] : null;
+            if (curFile == null) {
+                folderList[j].setName("");
+            } else {
+                folderList[j].setName(curFile.getName());
+                
+            }
             folderList[j].setName(name);
         }
     }
@@ -183,6 +198,8 @@ public class SimpleExplorer extends JFrame {
 
     private void exit(String exitDir) {
         finalDirectory = exitDir;
+        notDone = false;
+        setVisible(false);
         getRootPane().getParent().dispatchEvent(new WindowEvent(((JFrame) getRootPane().getParent()), WindowEvent.WINDOW_CLOSING));
     }
 
@@ -196,12 +213,7 @@ public class SimpleExplorer extends JFrame {
         that data to find more important information.
      */
     private File[] getDirFiles(String directory) {
-        return new File(directory).listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                return pathname.isDirectory() && !pathname.isHidden() && pathname.canRead();
-            }
-        });
+        return new File(directory).listFiles(currentFileFilter);
     }
 
     private File getFile(int index) {
@@ -340,6 +352,16 @@ public class SimpleExplorer extends JFrame {
         return closeLabel;
     }
 
+    private void makeFolders() {
+        // Makes 21 panels because that's how many fit on the display
+        System.out.println("Making Folders");
+        for (int i=0; i < 21; i++) {
+            String name = (curDirFiles != null && curDirFiles.length > i) ? curDirFiles[i].getName() : "";
+            folderList[i] = new FolderPanel(this, i, name, DATA.ICONS.FOLDER_ICON);
+            display.add(folderList[i].get());
+        }
+    }
+
     private int updateTab(final JLabel curTab, final File newFile, int margin) {
         /*
             Takes in a tab, edits  it for new properties, then returns its width
@@ -423,6 +445,38 @@ public class SimpleExplorer extends JFrame {
         };
     }
 
+    public void setFileFilterToFolders() {
+        currentFileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.isDirectory() && !pathname.isHidden() && pathname.canRead();
+            }
+        };
+    }
+
+    public void setFileFilter(final String[] acceptedFileExtensions) {
+        currentFileFilter =  new FileFilter() {
+            @Override
+            public boolean accept(File curFile) {
+                for (String curExtension : acceptedFileExtensions) {
+                    if (!curFile.getAbsolutePath().contains(curExtension) && !curFile.isDirectory()){
+                        return false;
+                    }
+                }
+                return curFile.isDirectory() && !curFile.isHidden() && curFile.canRead();
+            }
+        };
+    }
+
+    public void setFileFilterToExecutables() {
+        currentFileFilter =  new FileFilter() {
+            @Override
+            public boolean accept(File curFile) {
+                return (curFile.isDirectory() && !curFile.isHidden() && curFile.canRead()) ||
+                       (!curFile.isDirectory() && curFile.canExecute());
+            }
+        };
+    }
     /*
         These are tools. Small functions that do often-repeated tasks
      */

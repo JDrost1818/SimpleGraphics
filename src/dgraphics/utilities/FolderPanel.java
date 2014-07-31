@@ -87,4 +87,8 @@ public class FolderPanel {
             mainPanel.setVisible(true);
         }
     }
+
+    public void setIcon(ImageIcon newIcon) {
+        this.icon.setIcon(newIcon);
+    }
 }

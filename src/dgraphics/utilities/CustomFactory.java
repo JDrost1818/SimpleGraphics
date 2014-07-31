@@ -33,7 +33,7 @@ public class CustomFactory {
         return contentPane;
     }
 
-    private static Timer buildFadeTimer(final Color[] colors, final Container contentPane, final JLabel button, final int direction) {
+    private static Timer buildFadeTimer(final Color[] colors, final Container contentPane, final JLabel button, final int direction, final int hop) {
         return new Timer(1, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int red, green, blue, alpha;
@@ -41,7 +41,7 @@ public class CustomFactory {
                 red     = colors[0].getRed();
                 green   = colors[0].getGreen();
                 blue    = colors[0].getBlue();
-                alpha   = (button.getBackground() == contentPane.getBackground()) ? 0 : colors[4].getAlpha()+(10*direction);
+                alpha   = (button.getBackground() == contentPane.getBackground()) ? 0 : colors[4].getAlpha()+(hop*direction);
 
                 if (alpha > 255) {
                     button.setBackground(colors[0]);
@@ -73,8 +73,8 @@ public class CustomFactory {
         newButton.setForeground(colors[3]);
 
         // Add Actions/Event Handlers
-        final Timer enterTimer = buildFadeTimer(colors, contentPane, newButton, 1);
-        final Timer exitTimer = buildFadeTimer(colors, contentPane, newButton, -1);
+        final Timer enterTimer = buildFadeTimer(colors, contentPane, newButton, 1, 50);
+        final Timer exitTimer = buildFadeTimer(colors, contentPane, newButton, -1, 40);
         newButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -88,7 +88,7 @@ public class CustomFactory {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                newButton.getRootPane().getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                contentPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 newButton.setForeground(colors[2]);
                 if (invisible) {
                     enterTimer.start();
@@ -109,7 +109,7 @@ public class CustomFactory {
 
                 newButton.setBorder(null);
                 newButton.setForeground(colors[3]);
-                newButton.getRootPane().getContentPane().setCursor(Cursor.getDefaultCursor());
+                contentPane.setCursor(Cursor.getDefaultCursor());
             }
         });
 
