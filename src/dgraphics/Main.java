@@ -5,9 +5,6 @@ import dgraphics.utilities.SimpleExplorer;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Created by jdrost on 7/16/2014.
- */
 public class Main {
 
     public static void main(String[] args) {
@@ -17,7 +14,7 @@ public class Main {
         UIManager.put("TextField.foreground", new Color(0x404040));
 
         SimpleExplorer x = new SimpleExplorer();
-        x.execute("C:\\Users\\");
+        System.out.println("Final place = " + x.execute("C:\\Users\\"));
         //GUI gui = new GUI();
         //gui.setVisible(true);
     }

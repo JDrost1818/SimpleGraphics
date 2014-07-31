@@ -17,14 +17,14 @@ import java.util.ArrayList;
 public class SimpleExplorer extends JFrame {
 
     // Default L&F Stuff
-    private final LineBorder defaultBorder = new LineBorder(new Color(0, 0, 0, 25), 2, true);
     private final Font defaultFont = new Font("Verdana", Font.PLAIN, 14);
+    private final LineBorder defaultBorder = new LineBorder(new Color(0, 0, 0, 25), 2, true);
     private final ImageIcon folderIcon = new ImageIcon(this.getClass().getResource("Flat_Folder_Icon.png"));
 
     // Top Level Containers
-    private final JPanel contentPane = new JPanel(null);
     private final JPanel display = new JPanel(null);
     private final JPanel tabPanel = new JPanel(null);
+    private final JPanel contentPane = new JPanel(null);
 
     // Components - Tabs
     private JLabel backTab = new JLabel("", SwingConstants.CENTER);
@@ -32,15 +32,18 @@ public class SimpleExplorer extends JFrame {
     private JLabel secondTab = new JLabel("", SwingConstants.CENTER);
 
     // Variables
+    private boolean notDone = true;
     private File currentFile;
     private File[] curDirFiles;
     private int curPageIndex = 0;
+    private String finalDirectory;
     private String currentDirectory;
-    private ArrayList<File> filePath = new ArrayList<File>();
-    private FolderPanel[] folderList = new FolderPanel[21];
+    private String startingDirectory;
     private MouseListener backTabListener;
     private MouseListener firstTabListener;
     private MouseListener secondTabListener;
+    private FolderPanel[] folderList = new FolderPanel[21];
+    private ArrayList<File> filePath = new ArrayList<File>();
 
     public SimpleExplorer() {
 
@@ -76,7 +79,7 @@ public class SimpleExplorer extends JFrame {
 
     }
 
-    public void execute(String startingDirectory) {
+    public String execute(String beginDirectory) {
         /*
             Populates the display. Everything else hereafter is handled
             by the buttons and the refreshHandler
@@ -85,6 +88,7 @@ public class SimpleExplorer extends JFrame {
         setVisible(true);
 
         // Intitializes needed variables/data
+        startingDirectory = beginDirectory;
         currentDirectory = startingDirectory;
         curDirFiles = getDirFiles(currentDirectory);
         filePath = getDirFilePath(currentDirectory);
@@ -100,6 +104,16 @@ public class SimpleExplorer extends JFrame {
         makeTabs(filePath);
 
         refresh();
+
+        while (notDone) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return finalDirectory;
     }
 
     /*
@@ -174,6 +188,12 @@ public class SimpleExplorer extends JFrame {
         }
     }
 
+    private void exit(String exitDir) {
+        notDone = false;
+        finalDirectory = exitDir;
+        getRootPane().getParent().dispatchEvent(new WindowEvent(((JFrame) getRootPane().getParent()), WindowEvent.WINDOW_CLOSING));
+    }
+
     /*
         These are data finders. They take a variable in and extrapolate
         that data to find more important information.
@@ -219,6 +239,7 @@ public class SimpleExplorer extends JFrame {
         JLabel selectButton = CustomFactory.buildButton("Select", DATA.COLORS.GREEN, getContentPane(), true, new Runnable() {
             @Override
             public void run() {
+                exit(currentDirectory);
             }
         });
         selectButton.setBounds(290, 250, 75, 35);
@@ -231,7 +252,7 @@ public class SimpleExplorer extends JFrame {
         JLabel cancelButton = CustomFactory.buildButton("Cancel", DATA.COLORS.RED, getContentPane(), true, new Runnable() {
             @Override
             public void run() {
-                getRootPane().getParent().dispatchEvent(new WindowEvent(((JFrame) getRootPane().getParent()), WindowEvent.WINDOW_CLOSING));
+                exit(startingDirectory);
             }
         });
         cancelButton.setBounds(375, 250, 75, 35);
