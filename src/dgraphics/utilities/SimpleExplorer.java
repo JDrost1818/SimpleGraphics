@@ -32,10 +32,14 @@ public class SimpleExplorer extends JFrame {
     private JLabel secondTab = new JLabel("", SwingConstants.CENTER);
 
     // Variables
-    private String currentDirectory;
     private File[] curDirFiles;
+    private int curPageIndex = 0;
+    private String currentDirectory;
     private ArrayList<File> filePath = new ArrayList<File>();
     private FolderPanel[] folderList = new FolderPanel[21];
+    private MouseListener backTabListener;
+    private MouseListener firstTabListener;
+    private MouseListener secondTabListener;
 
     public SimpleExplorer() {
 
@@ -112,7 +116,7 @@ public class SimpleExplorer extends JFrame {
 
         // This means a Folder was clicked, which only returns an index, unlike tabs
         if (curFile == null) {
-            curFile = getFile(index);
+            curFile = getFile((this.curPageIndex*21) + index);
         }
 
         currentDirectory = curFile.getAbsolutePath();
@@ -259,7 +263,34 @@ public class SimpleExplorer extends JFrame {
         curTab.setBorder(defaultBorder);
         curTab.setOpaque(true);
 
-        curTab.addMouseListener(new MouseListener() {
+
+        updateListener(curTab, newFile);
+
+        int width = determineWidth(curTab);
+        curTab.setBounds(margin, 0, width, 30);
+
+        return width;
+    }
+
+    private void updateListener(final JLabel curTab, final File newFile) {
+        // Removes old listener, updates to new listener, and adds back
+        if (curTab == backTab) {
+            curTab.removeMouseListener(backTabListener);
+            backTabListener = getNewMouseListener(curTab, newFile);
+            curTab.addMouseListener(backTabListener);
+        } else if (curTab == firstTab) {
+            curTab.removeMouseListener(firstTabListener);
+            firstTabListener = getNewMouseListener(curTab, newFile);
+            curTab.addMouseListener(firstTabListener);
+        } else {
+            curTab.removeMouseListener(secondTabListener);
+            secondTabListener = getNewMouseListener(curTab, newFile);
+            curTab.addMouseListener(secondTabListener);
+        }
+    }
+
+    private MouseListener getNewMouseListener(final JLabel curTab, final File newFile) {
+        return new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 ((Component) e.getSource()).removeMouseListener(this);
@@ -294,12 +325,7 @@ public class SimpleExplorer extends JFrame {
 
                 getContentPane().setCursor(Cursor.getDefaultCursor());
             }
-        });
-
-        int width = determineWidth(curTab);
-        curTab.setBounds(margin, 0, width, 30);
-
-        return width;
+        };
     }
 
     /*
