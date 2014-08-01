@@ -96,6 +96,7 @@ public class SimpleExplorer extends JFrame {
          */
 
         setVisible(true);
+        setFileFilterToExecutables();
 
         // Used for return value if canceled
         startingDirectory = beginDirectory;
@@ -152,6 +153,7 @@ public class SimpleExplorer extends JFrame {
         } else {
             currentFile = curFile;
             currentFilePath = null;
+            markActive(null);
             currentDirectory = curFile.getAbsolutePath();
             curDirFiles = getDirFiles(currentDirectory);
             filePath = getDirFilePath(currentDirectory);
@@ -523,9 +525,10 @@ public class SimpleExplorer extends JFrame {
         }
 
         int index = getIndex(curFile);
-        curActivePanel = folderList[index];
-        curActivePanel.setActive();
-
+        if (index != -1) {
+            curActivePanel = folderList[DMath.bind(index, 21)];
+            curActivePanel.setActive();
+        }
     }
 
     private int getIndex(File curFile) {
