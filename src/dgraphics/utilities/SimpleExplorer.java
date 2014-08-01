@@ -6,6 +6,7 @@ import dgraphics.data.DATA;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -134,6 +135,7 @@ public class SimpleExplorer extends JFrame {
         // This means a Folder was clicked, which only gives an index
         if (curFile == null) {
             curFile = getFile((this.curPageIndex*21) + index);
+            curPageIndex = 0;
         }
 
         currentFile = curFile;
@@ -158,9 +160,9 @@ public class SimpleExplorer extends JFrame {
                 folderList[j].setName("");
             } else {
                 folderList[j].setName(curFile.getName());
-                
+                folderList[j].setIcon((ImageIcon) FileSystemView.getFileSystemView().getSystemIcon(curFile));
             }
-            folderList[j].setName(name);
+            //folderList[j].setName(name);
         }
     }
 
@@ -206,7 +208,6 @@ public class SimpleExplorer extends JFrame {
     public String  getReturnValue() {
         return finalDirectory;
     }
-
 
     /*
         These are data finders. They take a variable in and extrapolate
@@ -354,10 +355,10 @@ public class SimpleExplorer extends JFrame {
 
     private void makeFolders() {
         // Makes 21 panels because that's how many fit on the display
-        System.out.println("Making Folders");
         for (int i=0; i < 21; i++) {
+            assert curDirFiles != null;
             String name = (curDirFiles != null && curDirFiles.length > i) ? curDirFiles[i].getName() : "";
-            folderList[i] = new FolderPanel(this, i, name, DATA.ICONS.FOLDER_ICON);
+            folderList[i] = new FolderPanel(this, i, name, (ImageIcon) FileSystemView.getFileSystemView().getSystemIcon(curDirFiles[i]));
             display.add(folderList[i].get());
         }
     }
@@ -414,6 +415,7 @@ public class SimpleExplorer extends JFrame {
                 curTab.setBackground(Color.white);
                 curTab.setForeground(DATA.COLORS.DARK_GRAY);
                 curTab.setBorder(defaultBorder);
+                curPageIndex = 0;
                 refreshHandler(newFile, -1);
             }
 
