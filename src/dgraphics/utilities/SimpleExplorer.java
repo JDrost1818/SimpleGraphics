@@ -205,7 +205,7 @@ public class SimpleExplorer extends JFrame {
     private void turnPage(int direction) {
         // direction = -1 for left or 1 for right
 
-        if (curDirFiles.length > this.curPageIndex*21 && direction > 0) {
+        if (curDirFiles.length > this.curPageIndex*21 + 21 && direction > 0) {
             this.curPageIndex += direction;
             refreshHandler(currentFile, -1);
         } else if (this.curPageIndex > 0 && direction < 0) {
