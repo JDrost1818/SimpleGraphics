@@ -14,6 +14,7 @@ public class FolderPanel {
     private final int index;
     private JLabel name;
     private JLabel icon;
+    private boolean isActive;
 
     public FolderPanel(final SimpleExplorer main, int number, String name, ImageIcon icon) {
 
@@ -51,8 +52,10 @@ public class FolderPanel {
             @Override
             public void mouseExited(MouseEvent e) {
                 mainPanel.setBorder(null);
-                mainPanel.setBackground(Color.white);
-                mainPanel.setForeground(DATA.COLORS.DARK_GRAY);
+                if (!isActive) {
+                    mainPanel.setBackground(Color.white);
+                    mainPanel.setForeground(DATA.COLORS.DARK_GRAY);
+                }
 
                 mainPanel.getRootPane().getContentPane().setCursor(Cursor.getDefaultCursor());
             }
@@ -90,5 +93,15 @@ public class FolderPanel {
 
     public void setIcon(ImageIcon newIcon) {
         this.icon.setIcon(newIcon);
+    }
+
+    public void setActive() {
+        mainPanel.setBackground(DATA.COLORS.GRAY);
+        isActive = true;
+    }
+
+    public void setInactive() {
+        mainPanel.setBackground(Color.white);
+        isActive = false;
     }
 }

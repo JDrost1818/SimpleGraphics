@@ -37,9 +37,11 @@ public class SimpleExplorer extends JFrame {
     private File[] curDirFiles;
     private int curPageIndex = 0;
     private boolean notDone = true;
+    private String currentFilePath;
     private String currentDirectory;
     private String startingDirectory;
     private String finalDirectory = "";
+    private FolderPanel curActivePanel;
     private FileFilter currentFileFilter;
     private File backFile = new File("<");
     private MouseListener backTabListener;
@@ -116,6 +118,10 @@ public class SimpleExplorer extends JFrame {
             }
         }
 
+        // This allows for the chooser to execute again next time called
+        notDone = true;
+        currentFilePath = null;
+
         return finalDirectory;
     }
 
@@ -138,16 +144,24 @@ public class SimpleExplorer extends JFrame {
             curPageIndex = 0;
         }
 
-        currentFile = curFile;
-        currentDirectory = curFile.getAbsolutePath();
-        curDirFiles = getDirFiles(currentDirectory);
-        filePath = getDirFilePath(currentDirectory);
+        if (!curFile.isDirectory()) {
+            // This means it is a file and can not be opened to view other files
+            // So should instead just mark it as active
+            markActive(curFile);
+            currentFilePath = curFile.getAbsolutePath();
+        } else {
+            currentFile = curFile;
+            currentFilePath = null;
+            currentDirectory = curFile.getAbsolutePath();
+            curDirFiles = getDirFiles(currentDirectory);
+            filePath = getDirFilePath(currentDirectory);
 
-        // Updates the 21 panels with their new names
-        updatePanels();
+            // Updates the 21 panels with their new names
+            updatePanels();
 
-        // Makes the tabs
-        makeTabs(filePath);
+            // Makes the tabs
+            makeTabs(filePath);
+        }
 
         refresh();
     }
@@ -249,7 +263,11 @@ public class SimpleExplorer extends JFrame {
         JLabel selectButton = CustomFactory.buildButton("Select", DATA.COLORS.GREEN, getContentPane(), true, new Runnable() {
             @Override
             public void run() {
-                exit(currentDirectory);
+                if (currentFilePath == null) {
+                    exit(currentDirectory);
+                } else {
+                    exit(currentFilePath);
+                }
             }
         });
         selectButton.setBounds(290, 250, 75, 35);
@@ -355,10 +373,17 @@ public class SimpleExplorer extends JFrame {
 
     private void makeFolders() {
         // Makes 21 panels because that's how many fit on the display
+        String name;
+        ImageIcon icon;
         for (int i=0; i < 21; i++) {
-            assert curDirFiles != null;
-            String name = (curDirFiles != null && curDirFiles.length > i) ? curDirFiles[i].getName() : "";
-            folderList[i] = new FolderPanel(this, i, name, (ImageIcon) FileSystemView.getFileSystemView().getSystemIcon(curDirFiles[i]));
+            if (curDirFiles != null && i < curDirFiles.length) {
+                name = curDirFiles[i].getName();
+                icon = (ImageIcon) FileSystemView.getFileSystemView().getSystemIcon(curDirFiles[i]);
+            } else {
+                name = "";
+                icon = null;
+            }
+            folderList[i] = new FolderPanel(this, i, name, icon);
             display.add(folderList[i].get());
         }
     }
@@ -490,6 +515,26 @@ public class SimpleExplorer extends JFrame {
     private int determineWidth(JLabel label) {
         return ((int) (label.getFontMetrics(label.getFont()).getStringBounds(label.getText(),label.getGraphics()).getWidth())
                 + label.getInsets().left + label.getInsets().right) + 12;
+    }
+
+    private void markActive(File curFile) {
+        if (curActivePanel != null) {
+            curActivePanel.setInactive();
+        }
+
+        int index = getIndex(curFile);
+        curActivePanel = folderList[index];
+        curActivePanel.setActive();
+
+    }
+
+    private int getIndex(File curFile) {
+        for (int i=0; i < curDirFiles.length; i++) {
+            if (curDirFiles[i] == curFile) {
+                return i;
+            }
+        }
+        return -1;
     }
 
 }
