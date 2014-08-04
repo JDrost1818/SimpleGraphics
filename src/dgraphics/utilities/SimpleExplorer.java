@@ -42,11 +42,16 @@ public class SimpleExplorer extends JFrame {
     private String startingDirectory;
     private String finalDirectory = "";
     private FolderPanel curActivePanel;
-    private FileFilter currentFileFilter;
     private File backFile = new File("<");
     private MouseListener backTabListener;
     private MouseListener firstTabListener;
     private MouseListener secondTabListener;
+
+    // File Filter Variables
+    private FileFilter folderFileFilter;
+    private boolean shouldShowExecutables;
+    private FileFilter executableFileFilter;
+
 
     private ArrayList<File> filePath = new ArrayList<File>();
     private FolderPanel[] folderList = new FolderPanel[21];
@@ -83,7 +88,7 @@ public class SimpleExplorer extends JFrame {
         contentPane.add(getScrollLeftButton());
         contentPane.add(getScrollRightButton());
 
-        setFileFilterToFolders();
+        setFileFilters();
 
     }
 
@@ -96,7 +101,6 @@ public class SimpleExplorer extends JFrame {
          */
 
         setVisible(true);
-        setFileFilterToExecutables();
 
         // Used for return value if canceled
         startingDirectory = beginDirectory;
@@ -230,7 +234,20 @@ public class SimpleExplorer extends JFrame {
         that data to find more important information.
      */
     private File[] getDirFiles(String directory) {
-        return new File(directory).listFiles(currentFileFilter);
+        File[] files = new File(directory).listFiles(folderFileFilter);
+        File[] exe = new File[] {};
+        File[] finalFileList;
+
+        if (shouldShowExecutables) {
+            exe = new File(directory).listFiles(executableFileFilter);
+        }
+
+        finalFileList = new File[files.length + exe.length];
+        System.arraycopy(files, 0, finalFileList, 0, files.length);
+        System.arraycopy(exe, 0, finalFileList, files.length, exe.length);
+
+        return finalFileList;
+
     }
 
     private File getFile(int index) {
@@ -474,37 +491,28 @@ public class SimpleExplorer extends JFrame {
         };
     }
 
-    public void setFileFilterToFolders() {
-        currentFileFilter = new FileFilter() {
+    public void setFileFilters() {
+        folderFileFilter = new FileFilter() {
             @Override
             public boolean accept(File pathname) {
                 return pathname.isDirectory() && !pathname.isHidden() && pathname.canRead();
             }
         };
-    }
 
-    public void setFileFilter(final String[] acceptedFileExtensions) {
-        currentFileFilter =  new FileFilter() {
+        executableFileFilter =  new FileFilter() {
             @Override
             public boolean accept(File curFile) {
-                for (String curExtension : acceptedFileExtensions) {
-                    if (!curFile.getAbsolutePath().contains(curExtension) && !curFile.isDirectory()){
-                        return false;
-                    }
-                }
-                return curFile.isDirectory() && !curFile.isHidden() && curFile.canRead();
+                return (!curFile.isDirectory() && curFile.canExecute());
             }
         };
+    }
+
+    public void setFileFilterToFolders() {
+        shouldShowExecutables = false;
     }
 
     public void setFileFilterToExecutables() {
-        currentFileFilter =  new FileFilter() {
-            @Override
-            public boolean accept(File curFile) {
-                return (curFile.isDirectory() && !curFile.isHidden() && curFile.canRead()) ||
-                       (!curFile.isDirectory() && curFile.canExecute());
-            }
-        };
+        shouldShowExecutables = true;
     }
     /*
         These are tools. Small functions that do often-repeated tasks
