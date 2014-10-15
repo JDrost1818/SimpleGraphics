@@ -1,6 +1,7 @@
 package dgraphics.utilities;
 
 import dgraphics.data.Colors;
+import dgraphics.data.DATA;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -12,7 +13,7 @@ import java.awt.event.MouseEvent;
 
 public class CustomFactory {
 
-    public static JPanel buildContentPane(Frame topFrame, Color backgroundColor, Dimension size){
+    public static JPanel buildContentPane(Color backgroundColor, Dimension size){
 
         /*
             Produces a pretty bare-bones JPanel which fits the style
@@ -60,7 +61,7 @@ public class CustomFactory {
 
     public static JLabel buildButton(String title, Color background, final Container contentPane, final boolean invisible, final Runnable action){
         // Get default colored labels
-        final JLabel newButton = ComponentFactory.getColoredJLabel(title, contentPane.getBackground());
+        final JLabel newButton = ComponentFactory.getColoredJLabel(title, contentPane.getBackground(), DATA.FONTS.BUTTON_FONT);
 
         // Figure out colors
         final Color[] colors = new Color[5]; // { BGActive, BGInactive, TextActive, TextInactive, TimerColor }

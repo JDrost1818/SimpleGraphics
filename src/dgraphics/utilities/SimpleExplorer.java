@@ -50,7 +50,9 @@ public class SimpleExplorer extends JFrame {
     // File Filter Variables
     private FileFilter folderFileFilter;
     private boolean shouldShowExecutables;
+    private boolean shouldShowCustomFilter;
     private FileFilter executableFileFilter;
+    private FileFilter customFileFilter;
 
 
     private ArrayList<File> filePath = new ArrayList<File>();
@@ -234,17 +236,22 @@ public class SimpleExplorer extends JFrame {
         that data to find more important information.
      */
     private File[] getDirFiles(String directory) {
-        File[] files = new File(directory).listFiles(folderFileFilter);
-        File[] exe = new File[] {};
+        File[] folders = new File(directory).listFiles(folderFileFilter);
+        File[] files = new File[] {};
         File[] finalFileList;
 
         if (shouldShowExecutables) {
-            exe = new File(directory).listFiles(executableFileFilter);
+            files = new File(directory).listFiles(executableFileFilter);
+        } else if (shouldShowCustomFilter) {
+            files = new File(directory).listFiles(customFileFilter);
+            for (File f : files){
+                System.out.println(f);
+            }
         }
 
-        finalFileList = new File[files.length + exe.length];
-        System.arraycopy(files, 0, finalFileList, 0, files.length);
-        System.arraycopy(exe, 0, finalFileList, files.length, exe.length);
+        finalFileList = new File[folders.length + files.length];
+        System.arraycopy(folders, 0, finalFileList, 0, folders.length);
+        System.arraycopy(files, 0, finalFileList, folders.length, files.length);
 
         return finalFileList;
 
@@ -335,7 +342,7 @@ public class SimpleExplorer extends JFrame {
     }
 
     private JLabel getMinimize(){
-        final JLabel minLabel = ComponentFactory.getColoredJLabel("_", Color.white);
+        final JLabel minLabel = ComponentFactory.getColoredJLabel("_", Color.white, DATA.FONTS.DEFAULT);
         final Color[] palette = Colors.getColorPalette(Color.white);
         minLabel.setFont(defaultFont);
         minLabel.setBounds(contentPane.getWidth()-50, 10, 20, 20);
@@ -363,7 +370,7 @@ public class SimpleExplorer extends JFrame {
     }
 
     public JLabel getClose(){
-        final JLabel closeLabel = ComponentFactory.getColoredJLabel("X", Color.white);
+        final JLabel closeLabel = ComponentFactory.getColoredJLabel("X", Color.white, DATA.FONTS.DEFAULT);
         final Color[] palette = Colors.getColorPalette(Color.white);
         closeLabel.setFont(defaultFont);
         closeLabel.setBounds(contentPane.getWidth()-30, 10, 20, 20);
@@ -423,7 +430,6 @@ public class SimpleExplorer extends JFrame {
         curTab.setBorder(defaultBorder);
         curTab.setBackground(Color.white);
         curTab.setForeground(Colors.backgroundToText(Color.white));
-
 
         updateListener(curTab, newFile);
 
@@ -513,7 +519,41 @@ public class SimpleExplorer extends JFrame {
 
     public void setFileFilterToExecutables() {
         shouldShowExecutables = true;
+        shouldShowCustomFilter = false;
     }
+
+    public void setCustomFileFilter(final String[] extensions) {
+        shouldShowExecutables = false;
+        shouldShowCustomFilter = true;
+        customFileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                boolean acceptedExt = false;
+                for (String filterExtension : extensions) {
+                    if (pathname.getAbsolutePath().endsWith(filterExtension)){
+                        acceptedExt = true;
+                        break;
+                    }
+                }
+                return pathname.isDirectory() && !pathname.isHidden() && acceptedExt;
+            }
+        };
+    }
+
+    public void setCustomFileFilter(final String extension) {
+        shouldShowExecutables = false;
+        shouldShowCustomFilter = true;
+        customFileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                if (pathname.getAbsolutePath().endsWith(extension)){
+                    System.out.println(extension);
+                }
+                return !pathname.isHidden() && pathname.getAbsolutePath().endsWith(extension);
+            }
+        };
+    }
+
     /*
         These are tools. Small functions that do often-repeated tasks
      */

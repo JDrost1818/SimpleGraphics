@@ -20,6 +20,9 @@ public class Colors {
     public final Color LIGHT_BLUE = new Color(0x4167a6);
     public final Color DARK_BLUE = new Color(0x2e5493);
 
+    public final Color WHITE = new Color(0xFFFFFF);
+    public final Color BLACK = new Color(0x000000);
+
     public static Color[] getAllColors(){
         return new Color[] { new Color(0x2B2B2B),
                              new Color(0x3A3D3F),

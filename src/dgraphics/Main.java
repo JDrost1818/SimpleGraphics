@@ -15,6 +15,7 @@ public class Main {
 
         String dest = "c:\\Users\\jdrust\\";
         SimpleExplorer x = new SimpleExplorer();
+        x.setCustomFileFilter("exe");
         System.out.println(x.execute(dest));
         while (dest.equals(x.getReturnValue())){
             Thread.sleep(50);
