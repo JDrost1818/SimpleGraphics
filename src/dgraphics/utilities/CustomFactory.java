@@ -116,4 +116,11 @@ public class CustomFactory {
 
         return newButton;
     }
+
+    public static JPanel buildHorizontalSeperator(Color color, int y_marg) {
+        JPanel divider = new JPanel(null);
+        divider.setBounds(0, y_marg, 1000, 1);
+        divider.setBackground(color);
+        return divider;
+    }
 }

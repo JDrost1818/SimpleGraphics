@@ -13,7 +13,7 @@ public class Main {
         UIManager.put("TextField.font", new Font("Verdana", Font.PLAIN, 14));
         UIManager.put("TextField.foreground", new Color(0x404040));
 
-        String dest = "c:\\Users\\jdrust\\";
+        String dest = "c:Users";
         SimpleExplorer x = new SimpleExplorer();
         x.setCustomFileFilter("exe");
         System.out.println(x.execute(dest));
