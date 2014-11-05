@@ -22,14 +22,13 @@ public class SimpleComboBox {
     private final Color outlineColor;
     private final Color optionsHoverColor;
     private String[] options;
-    private JLabel[] optionsLabels;
+    private JLabel[] optionsLabels = new JLabel[0];
 
     public SimpleComboBox(Dimension size, Color bg, Color outline, Color hoverColor, String[] items){
 
         outlineColor = outline;
         optionsHoverColor = hoverColor;
         options = items;
-        optionsLabels = new JLabel[items.length-1];
 
         wrapper.setSize(size);
         wrapper.setBackground(bg);
@@ -74,17 +73,11 @@ public class SimpleComboBox {
         curAction.setBounds(15, 0, 125, 40);
         displayedPanel.add(curAction);
 
-        for (int i=1; i < options.length; i++) {
-            JLabel subItem = buildSubItemPanel(items[i], i);
-            optionsLabels[i-1] = subItem;
-            wrapper.add(subItem);
-            actualHeight += subItem.getHeight();
-        }
-        actualHeight++;
-
         JLabel dropDown = new JLabel(DATA.IMAGES.DOWN_CARET);
         dropDown.setBounds(165, 15, 20, 15);
         displayedPanel.add(dropDown);
+
+        setModel(items);
 
         wrapper.add(displayedPanel);
     }
@@ -119,7 +112,7 @@ public class SimpleComboBox {
         wrapper.setBounds(wrapper.getX(), wrapper.getY(), wrapper.getWidth(), newHeight);
     }
 
-    private JLabel buildSubItemPanel(final String name, int index) {
+    private JLabel buildSubItemPanel(final String name) {
 
         final JLabel returnLabel = new JLabel("   " + name);
         returnLabel.setOpaque(true);
@@ -131,14 +124,14 @@ public class SimpleComboBox {
         returnLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                returnLabel.getRootPane().getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                returnLabel.setBackground(optionsHoverColor);
+                ((JLabel)e.getSource()).getRootPane().getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                ((JLabel)e.getSource()).setBackground(optionsHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                returnLabel.getRootPane().getContentPane().setCursor(Cursor.getDefaultCursor());
-                returnLabel.setBackground(wrapper.getBackground());
+                ((JLabel)e.getSource()).getRootPane().getContentPane().setCursor(Cursor.getDefaultCursor());
+                ((JLabel)e.getSource()).setBackground(wrapper.getBackground());
                 for (MouseListener curListener : wrapper.getMouseListeners()) {
                     curListener.mouseExited(e);
                 }
@@ -146,7 +139,7 @@ public class SimpleComboBox {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                select(returnLabel.getText().trim());
+                select(((JLabel)e.getSource()).getText().trim());
                 setHeight(displayedPanel.getHeight());
             }
         });
@@ -171,6 +164,27 @@ public class SimpleComboBox {
             curLabel.setFont(newFont);
         }
         curAction.setFont(newFont);
+    }
+
+    public void setModel(String[] newOptions) {
+        MouseListener[] listeners = new MouseListener[0];
+        if (optionsLabels.length > 0) {
+             listeners = optionsLabels[0].getMouseListeners();
+        }
+        actualHeight = displayedPanel.getHeight();
+        optionsLabels = new JLabel[options.length-1];
+        this.options = newOptions;
+        curAction.setText(options[0]);
+        for (int i=1; i < options.length; i++) {
+            JLabel subItem = buildSubItemPanel(options[i]);
+            optionsLabels[i-1] = subItem;
+            wrapper.add(subItem);
+            actualHeight += subItem.getHeight();
+            for (MouseListener curListener : listeners) {
+                subItem.addMouseListener(curListener);
+            }
+        }
+        actualHeight++;
     }
 
     public String getCurSelection() {
