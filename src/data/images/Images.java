@@ -1,4 +1,4 @@
-package dgraphics.data.images;
+package data.images;
 
 import javax.swing.*;
 

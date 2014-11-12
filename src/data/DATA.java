@@ -1,6 +1,6 @@
-package dgraphics.data;
+package data;
 
-import dgraphics.data.images.Images;
+import data.images.Images;
 
 public class DATA {
 

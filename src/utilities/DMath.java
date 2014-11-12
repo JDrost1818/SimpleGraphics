@@ -1,4 +1,4 @@
-package dgraphics.utilities;
+package utilities;
 
 public class DMath {
 

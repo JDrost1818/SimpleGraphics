@@ -1,7 +1,5 @@
-package dgraphics;
-
-import dgraphics.data.DATA;
-import dgraphics.utilities.SimpleComboBox;
+import data.DATA;
+import utilities.SimpleComboBox;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,10 +26,8 @@ public class Main {
         */
         JFrame frame = new JFrame();
         JPanel y = new JPanel(null);
-        y.setBackground(DATA.COLORS.darkColor);
-        SimpleComboBox x = new SimpleComboBox(new Dimension(200, 45),
-                                              y.getBackground(), DATA.COLORS.lightColor, DATA.COLORS.LIGHT_GREEN,
-                                              new String[] { "CurItem", "SubItem 1", "SubItem 2", "SubItem 3" });
+        y.setBackground(DATA.COLORS.WHITE);
+        SimpleComboBox x = new SimpleComboBox(new Dimension(200, 45), new String[] { "CurItem", "SubItem 1", "SubItem 2", "SubItem 3" });
         x.setBounds(10, 10, x.getWidth(), x.getHeight());
         y.add(x.get());
         frame.setBounds(0, 0, 800, 500);

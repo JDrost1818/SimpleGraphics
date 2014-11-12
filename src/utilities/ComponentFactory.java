@@ -1,7 +1,7 @@
-package dgraphics.utilities;
+package utilities;
 
-import dgraphics.data.Colors;
-import dgraphics.data.DATA;
+import data.Colors;
+import data.DATA;
 
 import javax.swing.*;
 import java.awt.*;

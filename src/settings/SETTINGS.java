@@ -1,4 +1,4 @@
-package dgraphics.settings;
+package settings;
 
 import javax.swing.*;
 

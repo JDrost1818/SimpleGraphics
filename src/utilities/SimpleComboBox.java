@@ -1,7 +1,7 @@
-package dgraphics.utilities;
+package utilities;
 
-import dgraphics.data.Colors;
-import dgraphics.data.DATA;
+import data.Colors;
+import data.DATA;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -11,55 +11,68 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class SimpleComboBox {
+public class SimpleComboBox extends JPanel {
 
     private final JPanel displayedPanel = new JPanel(null);
-    private final JPanel wrapper = new JPanel(null);
 
     private final JLabel curAction;
 
     private int actualHeight;
-    private final Color outlineColor;
-    private final Color optionsHoverColor;
+
+    // Colors
+    private Color bgColor;
+    private Color textColor;
+    private Color outlineColor;
+    private Color optionsHoverColor;
+
     private String[] options;
     private JLabel[] optionsLabels = new JLabel[0];
 
-    public SimpleComboBox(Dimension size, Color bg, Color outline, Color hoverColor, String[] items){
+    ////////////////////
+    //  CONSTRUCTORS  //
+    ////////////////////
+    public SimpleComboBox(Dimension size, String[] items) {
+        this(size, items, DATA.COLORS.WHITE, DATA.COLORS.DARK_GRAY, DATA.COLORS.DARK_GRAY, DATA.COLORS.GRAY);
+    }
 
+    public SimpleComboBox(Dimension size, String[] items, Color bg, Color fg, Color outline, Color hoverColor){
+
+        bgColor = bg;
+        textColor = fg;
         outlineColor = outline;
         optionsHoverColor = hoverColor;
-        options = items;
 
-        wrapper.setSize(size);
-        wrapper.setBackground(bg);
-        wrapper.setBorder(new LineBorder(outline, 1));
+        setSize(size);
+        setBackground(bg);
+        setBorder(new LineBorder(outline, 1));
+        setLayout(null);
         actualHeight = (int) size.getHeight();
 
         displayedPanel.setSize(size);
         displayedPanel.setBorder(new LineBorder(outline, 1));
         displayedPanel.setBackground(bg);
-        wrapper.addMouseListener(new MouseAdapter() {
+        addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                wrapper.getRootPane().getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                getRootPane().getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                wrapper.getRootPane().getContentPane().setCursor(Cursor.getDefaultCursor());
+                getRootPane().getContentPane().setCursor(Cursor.getDefaultCursor());
                 Point p = e.getPoint().getLocation();
-                if (e.getSource() == wrapper) {
-                    if (!wrapper.contains(p)) {
+                if (e.getSource() == this) {
+                    if (!contains(p)) {
                         setHeight(displayedPanel.getHeight());
                     }
-                } else if (!wrapper.contains((int) p.getX(), (int) p.getY()) && p.getY() != -1) {
+                } else if (!contains((int) p.getX(), (int) p.getY()) && p.getY() != -1) {
                     setHeight(displayedPanel.getHeight());
                 }
             }
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (wrapper.getHeight() > displayedPanel.getHeight()) {
+                if (getHeight() > displayedPanel.getHeight()) {
                     setHeight(displayedPanel.getHeight());
                 } else {
                     setHeight(actualHeight);
@@ -73,17 +86,18 @@ public class SimpleComboBox {
         curAction.setBounds(15, 0, 125, 40);
         displayedPanel.add(curAction);
 
-        JLabel dropDown = new JLabel(DATA.IMAGES.DOWN_CARET);
+        JLabel dropDown = new JLabel("<html>&or</html>");
         dropDown.setBounds(165, 15, 20, 15);
         displayedPanel.add(dropDown);
 
         setModel(items);
-
-        wrapper.add(displayedPanel);
+        add(displayedPanel);
     }
 
+
+
     public void setSelectionListener(MouseListener newListener) {
-        Component[] components = wrapper.getComponents();
+        Component[] components = getComponents();
         for (Component curComp : components) {
             if (curComp != displayedPanel) {
                 curComp.addMouseListener(newListener);
@@ -92,12 +106,7 @@ public class SimpleComboBox {
     }
 
     public JComponent get() {
-        return wrapper;
-    }
-
-    public void setBounds(int x_marg, int y_marg, int x, int y){
-        wrapper.setBounds(x_marg,y_marg,x,y);
-        //Will also need to adjust the components...
+        return this;
     }
 
     public int getWidth() {
@@ -109,7 +118,7 @@ public class SimpleComboBox {
     }
 
     private void setHeight(int newHeight) {
-        wrapper.setBounds(wrapper.getX(), wrapper.getY(), wrapper.getWidth(), newHeight);
+        setBounds(getX(), getY(), getWidth(), newHeight);
     }
 
     private JLabel buildSubItemPanel(final String name) {
@@ -117,10 +126,10 @@ public class SimpleComboBox {
         final JLabel returnLabel = new JLabel("   " + name);
         returnLabel.setOpaque(true);
         returnLabel.setBorder(new MatteBorder(0,1,0,1, outlineColor));
-        returnLabel.setBackground(wrapper.getBackground());
+        returnLabel.setBackground(getBackground());
         returnLabel.setFont(DATA.FONTS.SMALL);
         returnLabel.setForeground(Colors.backgroundToText(displayedPanel.getBackground()));
-        returnLabel.setBounds(0, actualHeight, wrapper.getWidth(), 40);
+        returnLabel.setBounds(0, actualHeight, getWidth(), 40);
         returnLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -131,8 +140,8 @@ public class SimpleComboBox {
             @Override
             public void mouseExited(MouseEvent e) {
                 ((JLabel)e.getSource()).getRootPane().getContentPane().setCursor(Cursor.getDefaultCursor());
-                ((JLabel)e.getSource()).setBackground(wrapper.getBackground());
-                for (MouseListener curListener : wrapper.getMouseListeners()) {
+                ((JLabel)e.getSource()).setBackground(getBackground());
+                for (MouseListener curListener : getMouseListeners()) {
                     curListener.mouseExited(e);
                 }
             }
@@ -159,7 +168,7 @@ public class SimpleComboBox {
         }
     }
 
-    public void setFont(Font newFont) {
+    public void setNewFont(Font newFont) {
         for (JLabel curLabel : optionsLabels) {
             curLabel.setFont(newFont);
         }
@@ -178,7 +187,7 @@ public class SimpleComboBox {
         for (int i=1; i < options.length; i++) {
             JLabel subItem = buildSubItemPanel(options[i]);
             optionsLabels[i-1] = subItem;
-            wrapper.add(subItem);
+            add(subItem);
             actualHeight += subItem.getHeight();
             for (MouseListener curListener : listeners) {
                 subItem.addMouseListener(curListener);
