@@ -1,6 +1,7 @@
-package utilities;
+package utils;
 
 import data.DATA;
+import simplestructures.SimpleExplorer;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;

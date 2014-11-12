@@ -1,5 +1,6 @@
 import data.DATA;
-import utilities.SimpleComboBox;
+import simplestructures.SimpleComboBox;
+import simplestructures.SimpleFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,16 +25,9 @@ public class Main {
         //GUI gui = new GUI();
         //gui.setVisible(true);
         */
-        JFrame frame = new JFrame();
-        JPanel y = new JPanel(null);
-        y.setBackground(DATA.COLORS.WHITE);
+        SimpleFrame frame = new SimpleFrame(DATA.COLORS.darkColor);
         SimpleComboBox x = new SimpleComboBox(new Dimension(200, 45), new String[] { "CurItem", "SubItem 1", "SubItem 2", "SubItem 3" });
         x.setBounds(10, 10, x.getWidth(), x.getHeight());
-        y.add(x.get());
-        frame.setBounds(0, 0, 800, 500);
-        frame.setLocationRelativeTo(null);
-        frame.setContentPane(y);
-        frame.setVisible(true);
-
+        frame.add(x);
     }
 }

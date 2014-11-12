@@ -1,7 +1,11 @@
-package utilities;
+package simplestructures;
 
 import data.Colors;
 import data.DATA;
+import utils.ComponentFactory;
+import utils.CustomFactory;
+import utils.DMath;
+import utils.FolderPanel;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;

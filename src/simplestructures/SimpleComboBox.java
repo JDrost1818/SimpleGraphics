@@ -1,4 +1,4 @@
-package utilities;
+package simplestructures;
 
 import data.Colors;
 import data.DATA;
@@ -31,6 +31,7 @@ public class SimpleComboBox extends JPanel {
     ////////////////////
     //  CONSTRUCTORS  //
     ////////////////////
+
     public SimpleComboBox(Dimension size, String[] items) {
         this(size, items, DATA.COLORS.WHITE, DATA.COLORS.DARK_GRAY, DATA.COLORS.DARK_GRAY, DATA.COLORS.GRAY);
     }
@@ -90,11 +91,9 @@ public class SimpleComboBox extends JPanel {
         dropDown.setBounds(165, 15, 20, 15);
         displayedPanel.add(dropDown);
 
-        setModel(items);
+        //setModel(items);
         add(displayedPanel);
     }
-
-
 
     public void setSelectionListener(MouseListener newListener) {
         Component[] components = getComponents();
@@ -105,15 +104,11 @@ public class SimpleComboBox extends JPanel {
         }
     }
 
-    public JComponent get() {
-        return this;
-    }
-
-    public int getWidth() {
+    public int width() {
         return displayedPanel.getWidth();
     }
 
-    public int getHeight() {
+    public int height() {
         return displayedPanel.getHeight();
     }
 
