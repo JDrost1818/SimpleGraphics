@@ -87,6 +87,7 @@ public class SimpleFrame extends JFrame {
 
     public void add(JComponent _component) {
         contentPane.add(_component);
+        contentPane.repaint();
     }
 
     ///////////////////////////////////////////////////////

@@ -1,4 +1,5 @@
 import data.DATA;
+import simplestructures.SimpleButton;
 import simplestructures.SimpleComboBox;
 import simplestructures.SimpleFrame;
 
@@ -29,5 +30,9 @@ public class Main {
         SimpleComboBox x = new SimpleComboBox(new Dimension(200, 45), new String[] { "CurItem", "SubItem 1", "SubItem 2", "SubItem 3" });
         x.setBounds(10, 10, x.getWidth(), x.getHeight());
         frame.add(x);
+
+        SimpleButton y = new SimpleButton();
+        y.setBounds(400,400,80,50);
+        frame.add(y);
     }
 }
