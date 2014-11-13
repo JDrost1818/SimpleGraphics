@@ -26,13 +26,14 @@ public class Main {
         //GUI gui = new GUI();
         //gui.setVisible(true);
         */
-        SimpleFrame frame = new SimpleFrame(DATA.COLORS.darkColor);
+        SimpleFrame frame = new SimpleFrame(DATA.COLORS.WHITE);
         SimpleComboBox x = new SimpleComboBox(new Dimension(200, 45), new String[] { "CurItem", "SubItem 1", "SubItem 2", "SubItem 3" });
         x.setBounds(10, 10, x.getWidth(), x.getHeight());
         frame.add(x);
 
         SimpleButton y = new SimpleButton();
-        y.setBounds(400,400,80,50);
+        y.setBounds(400,400,160,50);
+        y.setColors(DATA.COLORS.GREEN, DATA.COLORS.DARK_GRAY, DATA.COLORS.WHITE);
         frame.add(y);
     }
 }

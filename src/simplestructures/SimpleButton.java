@@ -3,8 +3,10 @@ package simplestructures;
 import data.DATA;
 
 import javax.swing.*;
-import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -15,20 +17,39 @@ public class SimpleButton extends JButton {
 
     private Color activeTextColor = DATA.COLORS.DARK_GRAY;
     private Color textColor = DATA.COLORS.DARK_GRAY;
-
     private Color activeBackgroundColor = DATA.COLORS.GRAY;
-    private Color backgroundColor = DATA.COLORS.WHITE;
+
+    private boolean isOutlined = true;
+
+    //////////////////
+    // Constructors //
+    //////////////////
 
     public SimpleButton() {
-        this("SimpleButton", null);
+        this("SimpleButton", true);
     }
 
-    public SimpleButton(String _title, Border _border) {
+    public SimpleButton(String _title, boolean _shouldOutline, Color _background, Color _text, Color _textActive) {
+        this(_title, _shouldOutline);
+        setColors(_background, _text, _textActive);
+    }
+
+    public SimpleButton(String _title, boolean shouldOutline) {
+        if (shouldOutline) {
+            setBorder(new LineBorder(activeBackgroundColor, 1));
+        } else {
+            setBorder(null);
+        }
+
         setText(_title);
-        setBorder(_border);
-        setFont(DATA.FONTS.BUTTON_FONT);
+
+        Color backgroundColor = new Color(0, 0, 0, 0);
+        setBackground(backgroundColor, true);
+        setFont(DATA.FONTS.SMALL);
+
         setListeners();
 
+        isOutlined = shouldOutline;
         enterTimer = buildEnterTimer();
         leaveTimer = buildLeaveTimer();
     }
@@ -39,6 +60,49 @@ public class SimpleButton extends JButton {
     //     easy-to-use functions to change the frame   //
     /////////////////////////////////////////////////////
 
+    public void setColors(Color _background, Color _text, Color _textActive) {
+        activeBackgroundColor = _background;
+        textColor = _text;
+        activeTextColor = _textActive;
+        refreshColors();
+    }
+
+    public void setBackground(Color _background) {
+        activeBackgroundColor = _background;
+        refreshColors();
+    }
+
+    public void setForeground(Color _foreground) {
+        textColor = _foreground;
+        refreshColors();
+    }
+
+    public void setActiveForeground(Color _activeForeground) {
+        activeTextColor = _activeForeground;
+    }
+
+    ///////////////////////////////////////////////////////
+    //  Private Methods                                  //
+    //     These are used in the constructor and simply  //
+    //     give easy-to-decipher names to properties     //
+    //     automatically given to the frame              //
+    ///////////////////////////////////////////////////////
+
+    private void setBackground(Color _background, boolean forSuper) {
+        super.setBackground(_background);
+    }
+
+    private void setForeground(Color _foreground, boolean forSuper) {
+        super.setForeground(_foreground);
+    }
+
+    private void refreshColors() {
+        super.setForeground(textColor);
+        if (isOutlined) {
+            setBorder(new LineBorder(new Color(activeBackgroundColor.getRed(), activeBackgroundColor.getGreen(), activeBackgroundColor.getBlue(), 70), 1));
+        }
+        repaint();
+    }
 
     private void setListeners() {
         // Add Actions/Event Handlers
@@ -46,7 +110,7 @@ public class SimpleButton extends JButton {
             @Override
             public void mouseEntered(MouseEvent e) {
                 getRootPane().getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                setForeground(activeTextColor);
+                setForeground(activeTextColor, true);
                 enterTimer.start();
                 leaveTimer.stop();
             }
@@ -55,18 +119,55 @@ public class SimpleButton extends JButton {
             public void mouseExited(MouseEvent e) {
                 enterTimer.stop();
                 leaveTimer.start();
-                setForeground(textColor);
+                setForeground(textColor, true);
                 getRootPane().getContentPane().setCursor(Cursor.getDefaultCursor());
             }
         });
     }
 
     private Timer buildEnterTimer() {
-        return null;
+        return new Timer(1, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                final JPanel contentPane = (JPanel) getRootPane().getContentPane();
+
+                int red, green, blue, alpha;
+
+                red     = activeBackgroundColor.getRed();
+                green   = activeBackgroundColor.getGreen();
+                blue    = activeBackgroundColor.getBlue();
+                alpha   = getBackground().getAlpha() + 4;
+
+                if (alpha >= 255) {
+                    setBackground(activeBackgroundColor, true);
+                    ((Timer)e.getSource()).stop();
+                } else {
+                    setBackground(new Color(red, green, blue, alpha), true);
+                }
+                contentPane.repaint();
+            }
+        });
     }
 
     private Timer buildLeaveTimer() {
-        return null;
+        return new Timer(1, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                final JPanel contentPane = (JPanel) getRootPane().getContentPane();
+                int red, green, blue, alpha;
+
+                red     = activeBackgroundColor.getRed();
+                green   = activeBackgroundColor.getGreen();
+                blue    = activeBackgroundColor.getBlue();
+                alpha   = getBackground().getAlpha() - 4;
+
+                if (alpha < 0) {
+                    setBackground(new Color(0,0,0,0), true);
+                    ((Timer)e.getSource()).stop();
+                } else {
+                    setBackground(new Color(red, green, blue, alpha), true);
+                }
+                contentPane.repaint();
+            }
+        });
     }
 
 }
