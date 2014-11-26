@@ -2,6 +2,7 @@ import data.DATA;
 import simplestructures.SimpleButton;
 import simplestructures.SimpleComboBox;
 import simplestructures.SimpleFrame;
+import simplestructures.SimpleSeparator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,9 +10,10 @@ import java.awt.*;
 public class Main {
 
     public static void main(String[] args) throws InterruptedException {
-        UIManager.put("Label.font", new Font("Verdana", Font.PLAIN, 14));
+        UIManager.put("Label.font", DATA.FONTS.ROBOTO_LIGHT);
+        UIManager.put("Button.font", DATA.FONTS.ROBOTO_LIGHT);
         UIManager.put("Label.foreground", new Color(0x404040));
-        UIManager.put("TextField.font", new Font("Verdana", Font.PLAIN, 14));
+        UIManager.put("TextField.font", DATA.FONTS.ROBOTO_THIN);
         UIManager.put("TextField.foreground", new Color(0x404040));
         /*
         String dest = "c:Users";
@@ -35,5 +37,11 @@ public class Main {
         y.setBounds(400,400,160,50);
         y.setColors(DATA.COLORS.GREEN, DATA.COLORS.DARK_GRAY, DATA.COLORS.WHITE);
         frame.add(y);
+
+        SimpleSeparator z = new SimpleSeparator(1);
+
+        JLabel label = new JLabel("Hello World");
+        label.setBounds(400,30,200,30);
+        frame.add(label);
     }
 }

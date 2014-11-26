@@ -10,11 +10,10 @@ import java.awt.event.MouseEvent;
 
 public class ComponentFactory {
 
-    public static JLabel getColoredJLabel(String s, Color backgroundColor, Font font) {
+    public static JLabel getColoredJLabel(String s, Color backgroundColor) {
         JLabel newLabel = new JLabel(s, SwingConstants.CENTER);
 
         newLabel.setBackground(backgroundColor);
-        newLabel.setFont(font);
         newLabel.setForeground(Colors.backgroundToText(backgroundColor));
         newLabel.setOpaque(true);
 
@@ -22,7 +21,7 @@ public class ComponentFactory {
     }
 
     public static JLabel getMinimize(final JPanel contentPane, final Color backgroundColor){
-        final JLabel minLabel = getColoredJLabel("_", backgroundColor, DATA.FONTS.DEFAULT);
+        final JLabel minLabel = getColoredJLabel("_", backgroundColor);
         final Color[] palette = Colors.getColorPalette(backgroundColor);
         minLabel.setBounds(contentPane.getWidth()-70, 10, 30, 30);
         minLabel.setVerticalAlignment(SwingConstants.TOP);
@@ -49,7 +48,7 @@ public class ComponentFactory {
     }
 
     public static JLabel getClose(final Container contentPane, final Color backgroundColor){
-        final JLabel closeLabel = getColoredJLabel("X", backgroundColor, DATA.FONTS.DEFAULT);
+        final JLabel closeLabel = getColoredJLabel("X", backgroundColor);
         final Color[] palette = Colors.getColorPalette(backgroundColor);
         closeLabel.setBounds(contentPane.getWidth()-40, 10, 30, 30);
         closeLabel.setVerticalAlignment(SwingConstants.BOTTOM);

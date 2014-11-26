@@ -29,7 +29,15 @@ public class SimpleButton extends JButton {
         this("SimpleButton", true);
     }
 
-    public SimpleButton(String _title, boolean _shouldOutline, Color _background, Color _text, Color _textActive) {
+    public SimpleButton(String _title, Color _background, boolean _shouldOutline) {
+        this(_title, _background, DATA.COLORS.DARK_GRAY, DATA.COLORS.DARK_GRAY, _shouldOutline);
+    }
+
+    public SimpleButton(String _title, Color _background, Color _text, boolean _shouldOutline) {
+        this(_title, _background, _text, DATA.COLORS.DARK_GRAY, _shouldOutline);
+    }
+
+    public SimpleButton(String _title, Color _background, Color _text, Color _textActive, boolean _shouldOutline) {
         this(_title, _shouldOutline);
         setColors(_background, _text, _textActive);
     }
@@ -45,7 +53,6 @@ public class SimpleButton extends JButton {
 
         Color backgroundColor = new Color(0, 0, 0, 0);
         setBackground(backgroundColor, true);
-        setFont(DATA.FONTS.SMALL);
 
         setListeners();
 

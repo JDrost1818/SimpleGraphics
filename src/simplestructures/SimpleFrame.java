@@ -25,18 +25,39 @@ public class SimpleFrame extends JFrame {
     // Constructors //
     //////////////////
 
+    /**
+     * Constructs a default SimpleFrame instance.
+     * The frame is 800px x 500px and colored WHITE
+     */
     public SimpleFrame() {
         this(new Dimension(800,500));
     }
 
+    /**
+     * Constructs a SimpleFrame instance of the specified size.
+     * The frame is colored WHITE
+     * @param _size size of frame
+     */
     public SimpleFrame(Dimension _size) {
         this(_size, DATA.COLORS.WHITE);
     }
 
+    /**
+     * Constructs a SimpleFrame instance of the specified color.
+     * The frame is 800px x 500px
+     *
+     * @param _background color of frame
+     */
     public SimpleFrame(Color _background) {
         this(new Dimension(800, 500), _background);
     }
 
+    /**
+     * Constructs a SimpleFrame of specified size and color
+     *
+     * @param _size size of frame
+     * @param _background color of frame
+     */
     public SimpleFrame(Dimension _size, Color _background) {
 
         setContentPane(contentPane);
@@ -66,25 +87,50 @@ public class SimpleFrame extends JFrame {
     //     easy-to-use functions to change the frame   //
     /////////////////////////////////////////////////////
 
+    /**
+     * Sets the font of the default components on the frame
+     *
+     * @param _font font to be set
+     */
     public void setFrameFont(Font _font) {
         minButton.setFont(_font);
         closeButton.setFont(_font);
     }
 
+    /**
+     * Sets the text color of the default components on the frame
+     *
+     * @param _color color to be set
+     */
     public void setFrameTextColor(Color _color) {
         minButton.setForeground(_color);
         closeButton.setForeground(_color);
     }
 
+    /**
+     * Sets the background color of the frame to the specified color
+     *
+     * @param _color color to be set
+     */
     public void setFrameColor(Color _color) {
         setBackground(_color);
         getContentPane().setBackground(_color);
     }
 
+    /**
+     * Sets the border of the content pane of the frame
+     *
+     * @param _border border to be set
+     */
     public void setBorder(Border _border) {
         ((JPanel) getContentPane()).setBorder(_border);
     }
 
+    /**
+     * Adds a component to the content pane of the frame
+     *
+     * @param _component component to be added
+     */
     public void add(JComponent _component) {
         contentPane.add(_component);
         contentPane.repaint();
@@ -97,6 +143,10 @@ public class SimpleFrame extends JFrame {
     //     automatically given to the frame              //
     ///////////////////////////////////////////////////////
 
+    /**
+     * Adds MouseListeners to the frame that allow the frame to be
+     * dragged as if it were not set to undecorated
+     */
     private void setDraggable() {
         addMouseListener(new MouseAdapter() {
             @Override

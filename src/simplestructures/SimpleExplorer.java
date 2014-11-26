@@ -3,7 +3,6 @@ package simplestructures;
 import data.Colors;
 import data.DATA;
 import utils.ComponentFactory;
-import utils.CustomFactory;
 import utils.DMath;
 import utils.FolderPanel;
 
@@ -12,10 +11,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
@@ -290,9 +286,10 @@ public class SimpleExplorer extends JFrame {
         that can be found on the file explorer.
      */
     private Component getSelectButton() {
-        JLabel selectButton = CustomFactory.buildButton("Select", DATA.COLORS.GREEN, getContentPane(), true, new Runnable() {
+        SimpleButton selectButton = new SimpleButton("Select", DATA.COLORS.GREEN, true);
+        selectButton.addActionListener(new ActionListener() {
             @Override
-            public void run() {
+            public void actionPerformed(ActionEvent e) {
                 if (currentFilePath == null) {
                     exit(currentDirectory);
                 } else {
@@ -307,9 +304,10 @@ public class SimpleExplorer extends JFrame {
     }
 
     private Component getCancelButton() {
-        JLabel cancelButton = CustomFactory.buildButton("Cancel", DATA.COLORS.RED, getContentPane(), true, new Runnable() {
+        SimpleButton cancelButton = new SimpleButton("Cancel", DATA.COLORS.RED, true);
+        cancelButton.addActionListener(new ActionListener() {
             @Override
-            public void run() {
+            public void actionPerformed(ActionEvent e) {
                 exit(startingDirectory);
             }
         });
@@ -320,9 +318,10 @@ public class SimpleExplorer extends JFrame {
     }
 
     private Component getScrollLeftButton() {
-        JLabel scrollLeftButton = CustomFactory.buildButton("<", DATA.COLORS.GRAY, getContentPane(), true, new Runnable() {
+        SimpleButton scrollLeftButton = new SimpleButton("<", DATA.COLORS.GRAY, true);
+        scrollLeftButton.addActionListener(new ActionListener() {
             @Override
-            public void run() {
+            public void actionPerformed(ActionEvent e) {
                 turnPage(-1);
             }
         });
@@ -333,9 +332,10 @@ public class SimpleExplorer extends JFrame {
     }
 
     private Component getScrollRightButton() {
-        JLabel scrollRightButton = CustomFactory.buildButton(">", DATA.COLORS.GRAY, getContentPane(), true, new Runnable() {
+        SimpleButton scrollRightButton = new SimpleButton(">", DATA.COLORS.GRAY, true);
+        scrollRightButton.addActionListener(new ActionListener() {
             @Override
-            public void run() {
+            public void actionPerformed(ActionEvent e) {
                 turnPage(1);
             }
         });
@@ -346,7 +346,7 @@ public class SimpleExplorer extends JFrame {
     }
 
     private JLabel getMinimize(){
-        final JLabel minLabel = ComponentFactory.getColoredJLabel("_", Color.white, DATA.FONTS.DEFAULT);
+        final JLabel minLabel = ComponentFactory.getColoredJLabel("_", Color.white);
         final Color[] palette = Colors.getColorPalette(Color.white);
         minLabel.setFont(defaultFont);
         minLabel.setBounds(contentPane.getWidth()-50, 10, 20, 20);
@@ -374,7 +374,7 @@ public class SimpleExplorer extends JFrame {
     }
 
     public JLabel getClose(){
-        final JLabel closeLabel = ComponentFactory.getColoredJLabel("X", Color.white, DATA.FONTS.DEFAULT);
+        final JLabel closeLabel = ComponentFactory.getColoredJLabel("X", Color.white);
         final Color[] palette = Colors.getColorPalette(Color.white);
         closeLabel.setFont(defaultFont);
         closeLabel.setBounds(contentPane.getWidth()-30, 10, 20, 20);
