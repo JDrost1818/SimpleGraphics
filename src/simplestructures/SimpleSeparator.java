@@ -135,6 +135,7 @@ public class SimpleSeparator extends JSeparator {
      */
     public void setColor(Color _color) {
        setBackground(_color);
+       setForeground(_color);
     }
 
     /**

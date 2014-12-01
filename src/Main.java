@@ -1,8 +1,10 @@
 import data.DATA;
+import data.constants.SimpleConstants;
 import simplestructures.SimpleButton;
 import simplestructures.SimpleComboBox;
 import simplestructures.SimpleFrame;
 import simplestructures.SimpleSeparator;
+import simplestructures.SimpleLabel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,10 +40,23 @@ public class Main {
         y.setColors(DATA.COLORS.GREEN, DATA.COLORS.DARK_GRAY, DATA.COLORS.WHITE);
         frame.add(y);
 
-        SimpleSeparator z = new SimpleSeparator(1);
+        SimpleSeparator z = new SimpleSeparator(SimpleConstants.HORIZONTAL);
+        z.setBounds(400,100,100,400);
+        z.setThickness(1);
+        z.setColor(DATA.COLORS.GRAY);
+        frame.add(z);
 
-        JLabel label = new JLabel("Hello World");
-        label.setBounds(400,30,200,30);
+        SimpleLabel label = new SimpleLabel("Hello World");
+        label.setOpaque(true);
+        label.setBackground(DATA.COLORS.BLACK);
+        label.setLocation(30,400);
         frame.add(label);
+
+        JLabel label2 = new JLabel("Hello World");
+        label2.setBounds(100,100,100,100);
+        label2.setOpaque(true);
+        label2.setBackground(DATA.COLORS.BLACK);
+        label2.setLocation(90,400);
+        frame.add(label2);
     }
 }
