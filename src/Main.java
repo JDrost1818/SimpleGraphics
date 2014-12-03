@@ -32,7 +32,7 @@ public class Main {
         */
         SimpleFrame frame = new SimpleFrame(DATA.COLORS.WHITE);
         SimpleComboBox x = new SimpleComboBox(new Dimension(200, 45), new String[] { "CurItem", "SubItem 1", "SubItem 2", "SubItem 3" });
-        x.setBounds(10, 10, x.getWidth(), x.getHeight());
+        x.setLocation(10, 10);
         frame.add(x);
 
         SimpleButton y = new SimpleButton();
@@ -47,16 +47,8 @@ public class Main {
         frame.add(z);
 
         SimpleLabel label = new SimpleLabel("Hello World");
-        label.setOpaque(true);
-        label.setBackground(DATA.COLORS.BLACK);
         label.setLocation(30,400);
         frame.add(label);
 
-        JLabel label2 = new JLabel("Hello World");
-        label2.setBounds(100,100,100,100);
-        label2.setOpaque(true);
-        label2.setBackground(DATA.COLORS.BLACK);
-        label2.setLocation(90,400);
-        frame.add(label2);
     }
 }
