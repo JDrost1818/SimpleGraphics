@@ -25,6 +25,7 @@ public class ComponentFactory {
         final Color[] palette = Colors.getColorPalette(backgroundColor);
         minLabel.setBounds(contentPane.getWidth()-70, 10, 30, 30);
         minLabel.setVerticalAlignment(SwingConstants.TOP);
+        minLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         minLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -33,13 +34,11 @@ public class ComponentFactory {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                contentPane.getRootPane().getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 minLabel.setBackground(palette[2]);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                contentPane.getRootPane().getContentPane().setCursor(Cursor.getDefaultCursor());
                 minLabel.setBackground(palette[0]);
             }
         });
@@ -52,6 +51,7 @@ public class ComponentFactory {
         final Color[] palette = Colors.getColorPalette(backgroundColor);
         closeLabel.setBounds(contentPane.getWidth()-40, 10, 30, 30);
         closeLabel.setVerticalAlignment(SwingConstants.BOTTOM);
+        closeLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         closeLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -60,13 +60,11 @@ public class ComponentFactory {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                contentPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 closeLabel.setBackground(palette[2]);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                contentPane.setCursor(Cursor.getDefaultCursor());
                 closeLabel.setBackground(palette[0]);
             }
         });
@@ -81,21 +79,12 @@ public class ComponentFactory {
         entryField.setBackground(bg);
         entryField.setEditable(true);
         entryField.setFont(DATA.FONTS.SMALL);
+        entryField.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
         entryField.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (entryField.getText().equals(text))
                     entryField.setText("");
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                entryField.getRootPane().getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                entryField.getRootPane().getContentPane().setCursor(Cursor.getDefaultCursor());
             }
         });
 

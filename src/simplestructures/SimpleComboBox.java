@@ -52,15 +52,10 @@ public class SimpleComboBox extends JPanel {
         displayedPanel.setSize(size);
         displayedPanel.setBorder(new LineBorder(outline, 1));
         displayedPanel.setBackground(bg);
+        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseEntered(MouseEvent e) {
-                getRootPane().getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            }
-
-            @Override
             public void mouseExited(MouseEvent e) {
-                getRootPane().getContentPane().setCursor(Cursor.getDefaultCursor());
                 Point p = e.getPoint().getLocation();
                 if (e.getSource() == this) {
                     if (!contains(p)) {
@@ -125,16 +120,15 @@ public class SimpleComboBox extends JPanel {
         returnLabel.setFont(DATA.FONTS.SMALL);
         returnLabel.setForeground(Colors.backgroundToText(displayedPanel.getBackground()));
         returnLabel.setBounds(0, actualHeight, getWidth(), 40);
+        returnLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         returnLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                ((JLabel)e.getSource()).getRootPane().getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 ((JLabel)e.getSource()).setBackground(optionsHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                ((JLabel)e.getSource()).getRootPane().getContentPane().setCursor(Cursor.getDefaultCursor());
                 ((JLabel)e.getSource()).setBackground(getBackground());
                 for (MouseListener curListener : getMouseListeners()) {
                     curListener.mouseExited(e);

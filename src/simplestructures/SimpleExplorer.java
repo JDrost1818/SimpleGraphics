@@ -351,6 +351,7 @@ public class SimpleExplorer extends JFrame {
         minLabel.setFont(defaultFont);
         minLabel.setBounds(contentPane.getWidth()-50, 10, 20, 20);
         minLabel.setVerticalAlignment(SwingConstants.TOP);
+        minLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         minLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -359,13 +360,11 @@ public class SimpleExplorer extends JFrame {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                contentPane.getRootPane().getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 minLabel.setBackground(palette[2]);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                contentPane.getRootPane().getContentPane().setCursor(Cursor.getDefaultCursor());
                 minLabel.setBackground(palette[0]);
             }
         });
@@ -379,6 +378,7 @@ public class SimpleExplorer extends JFrame {
         closeLabel.setFont(defaultFont);
         closeLabel.setBounds(contentPane.getWidth()-30, 10, 20, 20);
         closeLabel.setVerticalAlignment(SwingConstants.BOTTOM);
+        closeLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         closeLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -387,13 +387,11 @@ public class SimpleExplorer extends JFrame {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                contentPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 closeLabel.setBackground(palette[2]);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                contentPane.setCursor(Cursor.getDefaultCursor());
                 closeLabel.setBackground(palette[0]);
             }
         });

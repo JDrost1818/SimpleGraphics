@@ -1,10 +1,6 @@
 import data.DATA;
 import data.constants.SimpleConstants;
-import simplestructures.SimpleButton;
-import simplestructures.SimpleComboBox;
-import simplestructures.SimpleFrame;
-import simplestructures.SimpleSeparator;
-import simplestructures.SimpleLabel;
+import simplestructures.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,5 +46,8 @@ public class Main {
         label.setLocation(30,400);
         frame.add(label);
 
+        SimpleScrollPanel scroll = new SimpleScrollPanel();
+        scroll.setLocation(200, 200);
+        frame.add(scroll);
     }
 }

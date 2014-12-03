@@ -32,6 +32,7 @@ public class FolderPanel {
 
         this.mainPanel.setBounds(getBounds(number));
         this.mainPanel.setBackground(Color.white);
+        this.mainPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         this.mainPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -45,7 +46,6 @@ public class FolderPanel {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                mainPanel.getRootPane().getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 mainPanel.setBackground(DATA.COLORS.GRAY);
                 mainPanel.setForeground(Color.white);
             }
@@ -57,8 +57,6 @@ public class FolderPanel {
                     mainPanel.setBackground(Color.white);
                     mainPanel.setForeground(DATA.COLORS.DARK_GRAY);
                 }
-
-                mainPanel.getRootPane().getContentPane().setCursor(Cursor.getDefaultCursor());
             }
         });
 

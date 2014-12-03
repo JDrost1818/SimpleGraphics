@@ -55,6 +55,7 @@ public class SimpleButton extends JButton {
         setBackground(backgroundColor, true);
 
         setListeners();
+        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         isOutlined = shouldOutline;
         enterTimer = buildEnterTimer();
@@ -116,7 +117,6 @@ public class SimpleButton extends JButton {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                getRootPane().getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 setForeground(activeTextColor, true);
                 enterTimer.start();
                 leaveTimer.stop();
@@ -127,7 +127,6 @@ public class SimpleButton extends JButton {
                 enterTimer.stop();
                 leaveTimer.start();
                 setForeground(textColor, true);
-                getRootPane().getContentPane().setCursor(Cursor.getDefaultCursor());
             }
         });
     }
