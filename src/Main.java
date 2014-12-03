@@ -8,10 +8,10 @@ import java.awt.*;
 public class Main {
 
     public static void main(String[] args) throws InterruptedException {
-        UIManager.put("Label.font", DATA.FONTS.ROBOTO_LIGHT);
-        UIManager.put("Button.font", DATA.FONTS.ROBOTO_LIGHT);
+        UIManager.put("Label.font", new Font("Roboto Light", 0, 18));
+        UIManager.put("Button.font", new Font("Roboto Light", 0, 18));
         UIManager.put("Label.foreground", new Color(0x404040));
-        UIManager.put("TextField.font", DATA.FONTS.ROBOTO_THIN);
+        UIManager.put("TextField.font", new Font("Roboto Thin", 0, 18));
         UIManager.put("TextField.foreground", new Color(0x404040));
         /*
         String dest = "c:Users";
@@ -43,10 +43,17 @@ public class Main {
         frame.add(z);
 
         SimpleLabel label = new SimpleLabel("Hello World");
+        label.setFont(new Font("Raleway", Font.BOLD, 20));
         label.setLocation(30,400);
         frame.add(label);
 
-        SimpleScrollPanel scroll = new SimpleScrollPanel();
+        JPanel panel = new JPanel(new GridLayout(0,1));
+        for (int i=1; i<=10; i++) {
+            panel.add(new JLabel("HELLO WORLD"));
+        }
+        panel.setBackground(Color.white);
+
+        SimpleScrollPanel scroll = new SimpleScrollPanel(new Dimension(200,200), panel);
         scroll.setLocation(200, 200);
         frame.add(scroll);
     }

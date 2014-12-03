@@ -114,7 +114,7 @@ public class SimpleSeparator extends JSeparator {
             throw new IllegalArgumentException("\"" + _direction + "\" is not a supported direction.");
         }
 
-        setBackground(_color);
+        setColor(_color);
 
         direction = _direction;
     }
