@@ -27,7 +27,7 @@ public class Main {
         //gui.setVisible(true);
         */
         SimpleFrame frame = new SimpleFrame(DATA.COLORS.WHITE);
-        SimpleComboBox x = new SimpleComboBox(new Dimension(200, 45), new String[] { "CurItem", "SubItem 1", "SubItem 2", "SubItem 3" });
+        SimpleComboBox x = new SimpleComboBox();
         x.setLocation(10, 10);
         frame.add(x);
 
@@ -43,18 +43,9 @@ public class Main {
         frame.add(z);
 
         SimpleLabel label = new SimpleLabel("Hello World");
-        label.setFont(new Font("Raleway", Font.BOLD, 20));
+        label.setFont(new Font("Lato Light", Font.PLAIN, 20));
+        label.autoSize();
         label.setLocation(30,400);
         frame.add(label);
-
-        JPanel panel = new JPanel(new GridLayout(0,1));
-        for (int i=1; i<=10; i++) {
-            panel.add(new JLabel("HELLO WORLD"));
-        }
-        panel.setBackground(Color.white);
-
-        SimpleScrollPanel scroll = new SimpleScrollPanel(new Dimension(200,200), panel);
-        scroll.setLocation(200, 200);
-        frame.add(scroll);
     }
 }

@@ -21,13 +21,17 @@ public class SimpleLabel extends JLabel {
         setForeground(fg);
         setBackground(bg);
 
-        setSize(determineWidth(), determineHeight());
+        autoSize();
         setHorizontalAlignment(SwingConstants.CENTER);
     }
 
     public void setBackground(Color bg) {
         setOpaque(bg != null); // So if bg is null, sets transparent
         super.setBackground(bg);
+    }
+
+    public void autoSize() {
+        setSize(determineWidth(), determineHeight());
     }
 
 	private int determineWidth() {

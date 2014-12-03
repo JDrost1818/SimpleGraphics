@@ -1,192 +1,66 @@
 package simplestructures;
 
-import data.Colors;
 import data.DATA;
+import data.constants.SimpleConstants;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.border.MatteBorder;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class SimpleComboBox extends JPanel {
 
-    private final JPanel displayedPanel = new JPanel(null);
+    private String[] model;
+    private final SimpleLabel curActionLabel;
+    private final SimpleLabel expandLabel;
+    private final JPanel curActionPanel;
+    private final JPanel hiddenOptions = new JPanel(new GridLayout(0,1));
 
-    private final JLabel curAction;
+    private String curAction;
 
-    private int actualHeight;
+    public SimpleComboBox() {
+        model = new String[] { "CurAction", "SubItem1", "SubItem2", "SubItem3" };
 
-    // Colors
-    private Color bgColor;
-    private Color textColor;
-    private Color outlineColor;
-    private Color optionsHoverColor;
+        curAction = model[0];
+        curActionLabel = new SimpleLabel(curAction);
+        expandLabel = new SimpleLabel("<html>&or</html>");
+        expandLabel.setFont(new Font("Raleway Light", Font.PLAIN, 20));
 
-    private String[] options;
-    private JLabel[] optionsLabels = new JLabel[0];
+        curActionPanel = new JPanel(null);
+        curActionPanel.setBackground(DATA.COLORS.WHITE);
+        curActionPanel.setBorder(new LineBorder(DATA.COLORS.BORDER_COLOR, 1, true));
+        curActionPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        curActionPanel.add(curActionLabel);
+        curActionPanel.add(expandLabel);
 
-    ////////////////////
-    //  CONSTRUCTORS  //
-    ////////////////////
+        sizeComponents();
 
-    public SimpleComboBox(Dimension size, String[] items) {
-        this(size, items, DATA.COLORS.WHITE, DATA.COLORS.DARK_GRAY, DATA.COLORS.DARK_GRAY, DATA.COLORS.GRAY);
+        setSize(curActionPanel.getSize());
+        add(curActionPanel);
+        refresh();
     }
 
-    public SimpleComboBox(Dimension size, String[] items, Color bg, Color fg, Color outline, Color hoverColor){
+    public void sizeComponents() {
+        curActionLabel.autoSize();
+        expandLabel.autoSize();
+        expandLabel.setSize(expandLabel.getHeight(), expandLabel.getHeight());
 
-        bgColor = bg;
-        textColor = fg;
-        outlineColor = outline;
-        optionsHoverColor = hoverColor;
+        // Size CurAction panel - the panel seen when not expanded
+        double width = expandLabel.getWidth() + curActionLabel.getWidth() + 20;
+        curActionPanel.setBounds(0,0,(int)width,(int) (width / SimpleConstants.GOLDEN_RATIO/2));
 
-        setSize(size);
-        setBackground(bg);
-        setBorder(new LineBorder(outline, 1));
-        setLayout(null);
-        actualHeight = (int) size.getHeight();
+        // Puts components in correct spot
+        int ymarg = (curActionPanel.getHeight() - curActionLabel.getHeight()) / 2;
+        curActionLabel.setLocation(0, ymarg);
+        expandLabel.setLocation((int) (width-expandLabel.getWidth()-2), ymarg+1);
 
-        displayedPanel.setSize(size);
-        displayedPanel.setBorder(new LineBorder(outline, 1));
-        displayedPanel.setBackground(bg);
-        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseExited(MouseEvent e) {
-                Point p = e.getPoint().getLocation();
-                if (e.getSource() == this) {
-                    if (!contains(p)) {
-                        setHeight(displayedPanel.getHeight());
-                    }
-                } else if (!contains((int) p.getX(), (int) p.getY()) && p.getY() != -1) {
-                    setHeight(displayedPanel.getHeight());
-                }
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (getHeight() > displayedPanel.getHeight()) {
-                    setHeight(displayedPanel.getHeight());
-                } else {
-                    setHeight(actualHeight);
-                }
-            }
-        });
-
-        curAction = new JLabel(items[0]);
-        curAction.setFont(DATA.FONTS.SMALL);
-        curAction.setForeground(Colors.backgroundToText(displayedPanel.getBackground()));
-        curAction.setBounds(15, 0, 125, 40);
-        displayedPanel.add(curAction);
-
-        JLabel dropDown = new JLabel("<html>&or</html>");
-        dropDown.setBounds(165, 15, 20, 15);
-        displayedPanel.add(dropDown);
-
-        //setModel(items);
-        add(displayedPanel);
+        // Will need to size the options panel here
     }
 
-    public void setSelectionListener(MouseListener newListener) {
-        Component[] components = getComponents();
-        for (Component curComp : components) {
-            if (curComp != displayedPanel) {
-                curComp.addMouseListener(newListener);
-            }
-        }
+    private void refresh() {
+        refreshModel();
     }
 
-    public int width() {
-        return displayedPanel.getWidth();
+    private void refreshModel() {
+        curActionLabel.setText(curAction);
     }
-
-    public int height() {
-        return displayedPanel.getHeight();
-    }
-
-    private void setHeight(int newHeight) {
-        setBounds(getX(), getY(), getWidth(), newHeight);
-    }
-
-    private JLabel buildSubItemPanel(final String name) {
-
-        final JLabel returnLabel = new JLabel("   " + name);
-        returnLabel.setOpaque(true);
-        returnLabel.setBorder(new MatteBorder(0,1,0,1, outlineColor));
-        returnLabel.setBackground(getBackground());
-        returnLabel.setFont(DATA.FONTS.SMALL);
-        returnLabel.setForeground(Colors.backgroundToText(displayedPanel.getBackground()));
-        returnLabel.setBounds(0, actualHeight, getWidth(), 40);
-        returnLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        returnLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                ((JLabel)e.getSource()).setBackground(optionsHoverColor);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                ((JLabel)e.getSource()).setBackground(getBackground());
-                for (MouseListener curListener : getMouseListeners()) {
-                    curListener.mouseExited(e);
-                }
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                select(((JLabel)e.getSource()).getText().trim());
-                setHeight(displayedPanel.getHeight());
-            }
-        });
-
-        return returnLabel;
-
-    }
-
-    private void select(String name) {
-        curAction.setText(name);
-        int index = 0;
-        for (String curOption : options) {
-            if (!curOption.equals(name)) {
-                optionsLabels[index].setText("   " + curOption);
-                index++;
-            }
-        }
-    }
-
-    public void setNewFont(Font newFont) {
-        for (JLabel curLabel : optionsLabels) {
-            curLabel.setFont(newFont);
-        }
-        curAction.setFont(newFont);
-    }
-
-    public void setModel(String[] newOptions) {
-        MouseListener[] listeners = new MouseListener[0];
-        if (optionsLabels.length > 0) {
-             listeners = optionsLabels[0].getMouseListeners();
-        }
-        actualHeight = displayedPanel.getHeight();
-        optionsLabels = new JLabel[options.length-1];
-        this.options = newOptions;
-        curAction.setText(options[0]);
-        for (int i=1; i < options.length; i++) {
-            JLabel subItem = buildSubItemPanel(options[i]);
-            optionsLabels[i-1] = subItem;
-            add(subItem);
-            actualHeight += subItem.getHeight();
-            for (MouseListener curListener : listeners) {
-                subItem.addMouseListener(curListener);
-            }
-        }
-        actualHeight++;
-    }
-
-    public String getCurSelection() {
-        return curAction.getText();
-    }
-
 }
