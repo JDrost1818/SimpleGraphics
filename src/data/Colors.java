@@ -38,6 +38,7 @@ public class Colors {
     public final Color DARK_BROWN = new Color(0x865d31);
 
     public final Color WHITE = new Color(0xFFFFFF);
+    public final Color LIGHT_GRAY = new Color(0xF1F1F1);
     public final Color GRAY = new Color(0xDDDDDD);
     public final Color DARK_GRAY = new Color(0x404040);
     public final Color BLACK = new Color(0x000000);
