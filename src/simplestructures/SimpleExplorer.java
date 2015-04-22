@@ -589,5 +589,4 @@ public class SimpleExplorer extends JFrame {
         }
         return -1;
     }
-
 }

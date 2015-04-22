@@ -130,8 +130,6 @@ public class SimpleSeparator extends JSeparator {
      * The default value of this property is DARK_GRAY.
      *
      * @param _color  new color of separator
-     *
-     * @see SimpleConstants
      */
     public void setColor(Color _color) {
        setBackground(_color);
