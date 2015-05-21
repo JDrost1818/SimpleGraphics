@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class SimpleButton extends JButton {
+public class SimpleButton extends JButton implements SimpleStructure {
 
     private final Timer enterTimer;
     private final Timer leaveTimer;
@@ -96,6 +96,9 @@ public class SimpleButton extends JButton {
 
         Color backgroundColor = new Color(0, 0, 0, 0);
         setBackground(backgroundColor, true);
+        setContentAreaFilled(false);
+        setOpaque(true);
+        setFocusPainted(false);
 
         setListeners();
         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -241,4 +244,8 @@ public class SimpleButton extends JButton {
         });
     }
 
+    @Override
+    public void setMargin(int marginLeft, int marginTop) {
+        setBounds(marginLeft, marginTop, getWidth(), getHeight());
+    }
 }

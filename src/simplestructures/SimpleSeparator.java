@@ -6,7 +6,7 @@ import data.constants.SimpleConstants;
 import javax.swing.*;
 import java.awt.*;
 
-public class SimpleSeparator extends JSeparator {
+public class SimpleSeparator extends JSeparator implements SimpleStructure {
 
     private static final int DEFAULT_THICKNESS = 1;
     private static final int DEFAULT_LENGTH = 50;
@@ -148,5 +148,10 @@ public class SimpleSeparator extends JSeparator {
         } else {
             setBounds(getX(), getY(), _thickness, getHeight());
         }
+    }
+
+    @Override
+    public void setMargin(int marginLeft, int marginTop) {
+        setBounds(marginLeft, marginTop, getWidth(), getHeight());
     }
 }

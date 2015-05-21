@@ -5,7 +5,7 @@ import data.DATA;
 import javax.swing.*;
 import java.awt.*;
 
-public class SimpleLabel extends JLabel {
+public class SimpleLabel extends JLabel implements SimpleStructure {
 
 	public SimpleLabel(String text) {
         this(text, DATA.COLORS.DARK_GRAY, null);
@@ -40,5 +40,10 @@ public class SimpleLabel extends JLabel {
 
     private int determineHeight() {
         return ((int) (getFontMetrics(getFont()).getStringBounds(getText(), getGraphics()).getHeight())) + 12;
+    }
+
+    @Override
+    public void setMargin(int marginLeft, int marginTop) {
+        setBounds(marginLeft, marginTop, getWidth(), getHeight());
     }
 }

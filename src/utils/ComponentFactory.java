@@ -2,6 +2,8 @@ package utils;
 
 import data.Colors;
 import data.DATA;
+import simplestructures.SimpleFrame;
+import simplestructures.SimpleLabel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -55,7 +57,7 @@ public class ComponentFactory {
         closeLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.exit(-1);
+                ((SimpleFrame)((JLabel) e.getSource()).getTopLevelAncestor()).close();
             }
 
             @Override

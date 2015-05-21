@@ -21,6 +21,14 @@ public class SimpleFrame extends JFrame {
     // Variables to enable dragging
     private int pX, pY;
 
+    // Close function
+    private Runnable onClose = new Runnable() {
+        @Override
+        public void run() {
+            System.exit(0);
+        }
+    };
+
     //////////////////
     // Constructors //
     //////////////////
@@ -134,6 +142,14 @@ public class SimpleFrame extends JFrame {
     public void add(JComponent _component) {
         contentPane.add(_component);
         contentPane.repaint();
+    }
+
+    public void setOnCloseOperation(Runnable newOnClose) {
+        onClose = newOnClose;
+    }
+
+    public void close() {
+        onClose.run();
     }
 
     ///////////////////////////////////////////////////////

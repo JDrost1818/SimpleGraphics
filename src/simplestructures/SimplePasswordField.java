@@ -10,7 +10,7 @@ import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
-public class SimplePasswordField extends JPasswordField {
+public class SimplePasswordField extends JPasswordField implements SimpleStructure {
     private String holdingText = "Enter Text Here";
 
     private Color inactiveColor = DATA.COLORS.INACTIVE_TEXT;
@@ -44,4 +44,8 @@ public class SimplePasswordField extends JPasswordField {
         });
     }
 
+    @Override
+    public void setMargin(int marginLeft, int marginTop) {
+        setBounds(marginLeft, marginTop, getWidth(), getHeight());
+    }
 }

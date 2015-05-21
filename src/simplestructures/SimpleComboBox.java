@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class SimpleComboBox extends JPanel {
+public class SimpleComboBox extends JPanel implements SimpleStructure {
 
     private String[] model;
     private final SimpleLabel curActionLabel;
@@ -102,5 +102,10 @@ public class SimpleComboBox extends JPanel {
 
     private void refreshModel() {
         curActionLabel.setText(curAction);
+    }
+
+    @Override
+    public void setMargin(int marginLeft, int marginTop) {
+        setBounds(marginLeft, marginTop, getWidth(), getHeight());
     }
 }

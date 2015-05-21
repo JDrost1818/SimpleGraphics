@@ -9,7 +9,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 
-public class SimpleTextField extends JTextField {
+public class SimpleTextField extends JTextField implements SimpleStructure {
 
     private String holdingText = "Enter Text Here";
 
@@ -42,5 +42,10 @@ public class SimpleTextField extends JTextField {
                 }
             }
         });
+    }
+
+    @Override
+    public void setMargin(int marginLeft, int marginTop) {
+        setBounds(marginLeft, marginTop, getWidth(), getHeight());
     }
 }
