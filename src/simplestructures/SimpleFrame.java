@@ -1,15 +1,16 @@
 package simplestructures;
 
+import com.sun.istack.internal.NotNull;
 import data.DATA;
+import oracle.jrockit.jfr.JFR;
 import utils.ComponentFactory;
+import utils.SimpleTools;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.awt.event.*;
 
 public class SimpleFrame extends JFrame {
 
@@ -17,6 +18,9 @@ public class SimpleFrame extends JFrame {
     private final JLabel minButton;
     private final JLabel closeButton;
     private final JPanel contentPane = new JPanel(null);
+
+    // Overlay
+    JFrame overlayFrame;
 
     // Variables to enable dragging
     private int pX, pY;
@@ -87,6 +91,30 @@ public class SimpleFrame extends JFrame {
         setBorder(new LineBorder(DATA.COLORS.BORDER_COLOR, 1));
         setDraggable();
         setVisible(true);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                close();
+            }
+        });
+
+        // Decorate Overlay Frame
+        overlayFrame = new JFrame();
+        overlayFrame.setType(Type.UTILITY);
+        overlayFrame.setUndecorated(true);
+        overlayFrame.setAlwaysOnTop(true);
+        overlayFrame.setBackground(new Color(0, 0, 0, 80));
+        // Without this, the window is draggable from any non transparent
+        // point, including points  inside textboxes.
+        overlayFrame.getRootPane().putClientProperty("apple.awt.draggableWindowBackground", false);
+        overlayFrame.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Component c = SwingUtilities.getDeepestComponentAt(e.getComponent(), e.getX(), e.getY());
+                if (c == overlayFrame.getContentPane())
+                    overlayFrame.setVisible(false);
+            }
+        });
     }
 
     /////////////////////////////////////////////////////
@@ -150,6 +178,30 @@ public class SimpleFrame extends JFrame {
 
     public void close() {
         onClose.run();
+        overlayFrame.dispose();
+    }
+
+    /**
+     * Adds a component to the content pane of the frame
+     *
+     * @param containerToDisplay component to be added to overlay and then displayed
+     */
+    public void showOverlay(JPanel containerToDisplay) {
+        overlayFrame.setBounds(getX(), getY(), getWidth(), getHeight());
+        if (containerToDisplay != null) {
+            final Container contentPane = overlayFrame.getContentPane();
+            contentPane.setLayout(null);
+
+            containerToDisplay.setBounds(
+                    SimpleTools.centerH(0, getWidth(), containerToDisplay),
+                    SimpleTools.centerV(0, getHeight(), containerToDisplay),
+                    containerToDisplay.getWidth(),
+                    containerToDisplay.getHeight()
+            );
+            overlayFrame.add(containerToDisplay);
+        }
+
+        overlayFrame.setVisible(true);
     }
 
     ///////////////////////////////////////////////////////

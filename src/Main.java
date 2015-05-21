@@ -4,6 +4,8 @@ import simplestructures.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Main {
 
@@ -26,7 +28,7 @@ public class Main {
         //GUI gui = new GUI();
         //gui.setVisible(true);
         */
-        SimpleFrame frame = new SimpleFrame(DATA.COLORS.WHITE);
+        final SimpleFrame frame = new SimpleFrame(DATA.COLORS.WHITE);
         SimpleComboBox x = new SimpleComboBox();
         x.setLocation(10, 10);
         frame.add(x);
@@ -34,6 +36,12 @@ public class Main {
         SimpleButton y = new SimpleButton();
         y.setBounds(400,400,160,50);
         y.setColors(DATA.COLORS.GREEN, DATA.COLORS.DARK_GRAY, DATA.COLORS.WHITE);
+        y.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                frame.showOverlay(null);
+            }
+        });
         frame.add(y);
 
         SimpleSeparator z = new SimpleSeparator(SimpleConstants.HORIZONTAL);
@@ -45,7 +53,7 @@ public class Main {
         SimpleLabel label = new SimpleLabel("Hello World");
         label.setFont(new Font("Lato Light", Font.PLAIN, 20));
         label.autoSize();
-        label.setLocation(30,400);
+        label.setLocation(30, 400);
         frame.add(label);
     }
 }
