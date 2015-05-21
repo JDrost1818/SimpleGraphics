@@ -30,6 +30,11 @@ public class SimpleLabel extends JLabel implements SimpleStructure {
         super.setBackground(bg);
     }
 
+    public void setFont(Font newFont) {
+        super.setFont(newFont);
+        autoSize();
+    }
+
     public void autoSize() {
         setSize(determineWidth(), determineHeight());
     }
